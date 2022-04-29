@@ -10,4 +10,19 @@
 #define TCK_SWCLK_Pin GPIO_PIN_14
 #define TCK_SWCLK_GPIO_Port GPIOA
 
+/***** Pinout *****/
+#define SPI_SCK_Pin     GPIO_PIN_5
+#define SPI_SCK_GPIO    GPIOA
+#define SPI_MOSI_Pin    GPIO_PIN_7
+#define SPI_MOSI_GPIO   GPIOA
+#define SPI_MISO_Pin    GPIO_PIN_6
+#define SPI_MISO_GPIO   GPIOA
+#define SPI_CSB_Pin     GPIO_PIN_5
+#define SPI_CSB_GPIO    GPIOC
+#define UART_TX_Pin     GPIO_PIN_9
+#define UART_TX_GPIO    GPIOA
+#define UART_RX_Pin     GPIO_PIN_10
+#define UART_RX_GPIO    GPIOA
+
+
 #endif
