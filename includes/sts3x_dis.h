@@ -1,11 +1,12 @@
-/****************************************
- *  This library is just an example.    *
- *  Here you should put simplified      *
- *  library description                 *
- *  Author:    Miroslaw Wiacek          *
- *  Date:      May 2022                 *
- *  Github profile: @Soberat            *
- ***************************************/
+/*******************************************************************************
+ *  A library to handle most of Sensirion STS3X-DIS sensor functions           *
+ *  (clock streching is not supported, and neither is reset via general call)  *
+ *  Based on Sensirion STS3X-DIS October 2019 Version 5 datasheet              *
+ *                                                                             *
+ *  Author:    Miroslaw Wiacek                                                 *
+ *  Date:      May 2022                                                        *
+ *  Github profile: @Soberat                                                   *
+ ******************************************************************************/
 #ifndef __STS3X_DIS_H__
 #define __STS3X_DIS_H__
 
@@ -19,6 +20,7 @@
 #define STS3X_CSOFF_REPEATABILITY_HIGH 0x2400
 #define STS3X_PERIODIC_READ 0xE000
 
+// Defines for periodic measurement configurations
 #define STS3X_PERIODIC_05MPS_REP_LOW 0x202F
 #define STS3X_PERIODIC_05MPS_REP_MEDIUM 0x2024
 #define STS3X_PERIODIC_05MPS_REP_HIGH 0x2032
@@ -42,6 +44,7 @@
 #define STS3X_HEATER_ENABLE 0x306D
 #define STS3X_HEATER_DISABLE 0x3066
 
+// Any non-zero state of the member should be treated as HIGH.
 typedef struct {
 	uint8_t checksumStatus;
 	uint8_t commandStatus;
@@ -76,15 +79,59 @@ enum retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, uint8_t addrPin, uint8_t
  * **************************/
 enum retcode_t sts3x_get_temperature(float* value, uint16_t configuration);
 
+/****************************
+ * @brief Start the periodic temperature sampling
+ * on the sensor, according to the configuration supplied.
+ * This only tells the sensor to sample not on demand, but periodically.
+ * To read the periodic data, @see sts3x_get_temperature
+ *
+ * @param configuration - measurement configuration,
+ *        one of STS3X_PERIODIC_XMPS defines
+ *
+ * @return 0 if success, else error number
+ * **************************/
 enum retcode_t sts3x_start_periodic_acquisition(uint16_t configuration);
 
+/****************************
+ * @brief Stop the periodic temperature sampling.
+ *
+ * @return 0 if success, else error number
+ * **************************/
 enum retcode_t sts3x_stop_periodic_acquisition();
 
+/****************************
+ * @brief Trigger a soft reset on sensor.
+ * @see Sensirion STS3X-DIS October 2019 V5 documentation, section 4.8
+ *
+ * @return 0 if success, else error number
+ * **************************/
 enum retcode_t sts3x_soft_reset();
 
+/****************************
+ * @brief Enable or disable the built-in sensor heater.
+ * @see Sensirion STS3X-DIS October 2019 V5 documentation, section 4.9
+ *
+ * @param heaterCommand - command to enable/disable the heater,
+ *        one of STS3X_HEATER_ defines.
+ * @return 0 if success, else error number
+ * **************************/
 enum retcode_t sts3x_set_heater_status(uint16_t heaterCommand);
 
+/****************************
+ * @brief Fetch the sensor status register data.
+ * @see Sensirion STS3X-DIS October 2019 V5 documentation, section 4.10, table 16
+ *
+ * @param statusRegister - pointer to STS3X_Status_Reg, to which the data will be written.
+ * @see STS3X_Status_Reg struct definition
+ * @return 0 if success, else error number
+ * **************************/
 enum retcode_t sts3x_get_status_register(STS3X_Status_Reg* statusRegister);
 
+/****************************
+ * @brief Clear the non-reserved status register bits.
+ * @see Sensirion STS3X-DIS October 2019 V5 documentation, section 4.10, table 16
+ *
+ * @return 0 if success, else error number
+ * **************************/
 enum retcode_t sts3x_clear_status_register();
 #endif
