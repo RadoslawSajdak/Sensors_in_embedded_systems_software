@@ -14,10 +14,11 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
+    int a = 1;
     while(1)
     {
         HAL_Delay(1000);
-        HAL_GPIO_TogglePin(GPIOC, LD3_Pin);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
     }
 }
 
@@ -63,13 +64,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LD4_Pin|LD3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_port, LED_pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LD4_Pin LD3_Pin */
-  GPIO_InitStruct.Pin = LD4_Pin|LD3_Pin;
+  /*Configure GPIO pins : LED_pin(PA8) */
+  GPIO_InitStruct.Pin = LED_pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_port, &GPIO_InitStruct);
 
 }
