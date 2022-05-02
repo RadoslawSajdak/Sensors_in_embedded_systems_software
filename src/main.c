@@ -1,7 +1,10 @@
 #include "stdint.h"
 #include "stdio.h"
+#include "string.h"
 #include "tools.h"
 #include "stm32f1xx_hal.h"
+
+#include "debug_uart.h"
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -10,14 +13,17 @@ GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 int main(void)
 {
+    char msg[] = "hello\n";
 
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
+    debug_uart_init(115200);
     while(1)
     {
-        HAL_Delay(1000);
+        HAL_Delay(300);
         HAL_GPIO_TogglePin(LED_port, LED_pin);
+        debug_uart_tx((uint8_t *)msg, strlen(msg));
     }
 }
 
@@ -71,5 +77,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_port, &GPIO_InitStruct);
+
+
 
 }
