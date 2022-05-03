@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "projectName": "Sensor_hub",
+    "configurations": [
+        {
+            "name": "STlink_debug",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/build/Sensor_hub.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stutil",
+            "device": "STM32F103C8Tx",
+            "interface": "swd",
+            "preLaunchTask": "Build all",
+            "runToEntryPoint": "main",
+            "svdFile": "${workspaceRoot}/stm32f103.svd",
+        }
+    ]
+}
