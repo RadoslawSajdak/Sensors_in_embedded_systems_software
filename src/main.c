@@ -13,8 +13,7 @@ GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 int main(void)
 {
-    char msg[] = "hello\n";
-
+    uint8_t i = 0;
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
@@ -23,7 +22,7 @@ int main(void)
     {
         HAL_Delay(300);
         HAL_GPIO_TogglePin(LED_port, LED_pin);
-        debug_uart_tx((uint8_t *)msg, strlen(msg));
+        debug_uart_printf("Hello printf n: %d\n", i++);
     }
 }
 
