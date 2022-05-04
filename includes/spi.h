@@ -3,7 +3,12 @@
 
 /***** Includes *****/
 #include "tools.h"
-#include "stm32f1xx.h"
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx_hal.h"
+#endif
 
 /***** Defines *****/
 #define SPI_REG_R(reg)  ((reg) | 0x80)

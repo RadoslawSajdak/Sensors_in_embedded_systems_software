@@ -36,6 +36,9 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
+ifeq ($(STMF),$(filter $(STMF),100 103))
+$(info $(STMF))
+endif
 
 ifeq ($(STMF), 100)
 
@@ -95,7 +98,7 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \schemat
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
@@ -110,18 +113,68 @@ ASM_SOURCES =  \
 startup_stm32f103xb.s
 
 C_INCLUDES =  \
+-IDrivers/Config/Include \
+-Iincludes \
 -IDrivers/STM32F1xx_HAL_Driver/Inc \
 -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
 -IDrivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include \
--IDrivers/stm32f103/CMSIS/Include \
--IDrivers/Config/Include \
--Iincludes
+-IDrivers/stm32f103/CMSIS/Include
 
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
 -DSTM32F103xB
 
 LDSCRIPT = STM32F103C8Tx_FLASH.ld
+
+endif
+
+ifeq ($(STMF), 429)
+
+C_SOURCES =  \
+src/main.c \
+src/spi.c \
+src/bmp280.c \
+Drivers/Config/Src/stm32f4xx_it.c \
+Drivers/Config/Src/stm32f4xx_hal_msp.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
+Drivers/Config/Src/system_stm32f4xx.c
+
+# ASM sources
+ASM_SOURCES =  \
+startup_stm32f429xx.s
+
+# C includes
+C_INCLUDES =  \
+-IDrivers/Config/Include \
+-Iincludes \
+-IDrivers/STM32F4xx_HAL_Driver/Inc \
+-IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
+-IDrivers/stm32f429/CMSIS/Device/ST/STM32F4xx/Include \
+-IDrivers/stm32f429/CMSIS/Include
+
+# C defines
+C_DEFS =  \
+-DUSE_HAL_DRIVER \
+-DSTM32F429xx
+
+# link script
+LDSCRIPT = STM32F429ZITx_FLASH.ld
 
 endif
 
@@ -148,14 +201,23 @@ BIN = $(CP) -O binary -S
 #######################################
 # CFLAGS
 #######################################
+
+ifeq ($(STMF),$(filter $(STMF),100 103))
 # cpu
 CPU = -mcpu=cortex-m3
-
 # fpu
 # NONE for Cortex-M0/M0+/M3
-
 # float-abi
+endif
 
+ifeq ($(STMF), 429)
+# cpu
+CPU = -mcpu=cortex-m4
+# fpu
+FPU = -mfpu=fpv4-sp-d16
+# float-abi
+FLOAT-ABI = -mfloat-abi=hard
+endif
 
 # mcu
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
@@ -163,8 +225,6 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 # macros for gcc
 # AS defines
 AS_DEFS = 
-
-# C defines
 
 
 
@@ -192,8 +252,6 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 #######################################
 # LDFLAGS
 #######################################
-# link script
-
 
 # libraries
 LIBS = -lc -lm -lnosys 

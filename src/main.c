@@ -1,8 +1,13 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "tools.h"
-#include "stm32f1xx_hal.h"
 #include "bmp280.h"
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx_hal.h"
+#endif
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -18,7 +23,7 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
-    if( 0 != bmp280_init(&spi1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
+    if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
     for(uint8_t i = 0; i < 6; i ++)
     {
         HAL_Delay(200);

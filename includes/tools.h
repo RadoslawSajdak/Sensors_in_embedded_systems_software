@@ -1,12 +1,24 @@
 #ifndef __TOOLS_H__
 #define __TOOLS_H__
 
-#define LED_pin GPIO_PIN_8
-#define LED_port GPIOA
+/***** Boards *****/
+#define STM32F4
+//#define STM32F1
+
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx_hal.h"
+#endif
+
+#define LED_pin GPIO_PIN_14
+#define LED_port GPIOG
 #define TMS_SWDIO_Pin GPIO_PIN_13
 #define TMS_SWDIO_GPIO_Port GPIOA
 #define TCK_SWCLK_Pin GPIO_PIN_14
 #define TCK_SWCLK_GPIO_Port GPIOA
+
 
 /***** Pinout *****/
 #define SPI_SCK_Pin     GPIO_PIN_5
