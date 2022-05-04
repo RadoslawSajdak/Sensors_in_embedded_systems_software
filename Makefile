@@ -13,6 +13,7 @@
 ######################################
 # target
 ######################################
+
 TARGET = Sensor_hub
 
 
@@ -35,6 +36,9 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
+
+ifeq ($(STMF), 100)
+
 C_SOURCES =  \
 src/main.c \
 Drivers/Config/Src/stm32f1xx_it.c \
@@ -58,6 +62,62 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
 ASM_SOURCES =  \
 startup_stm32f100xb.s
 
+C_INCLUDES =  \
+-IDrivers/STM32F1xx_HAL_Driver/Inc \
+-IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
+-IDrivers/stm32f100/CMSIS/Device/ST/STM32F1xx/Include \
+-IDrivers/stm32f100/CMSIS/Include \
+-IDrivers/Config/Include \
+-Iincludes
+
+C_DEFS =  \
+-DUSE_HAL_DRIVER \
+-DSTM32F100xB
+
+LDSCRIPT = STM32F100RBTx_FLASH.ld
+
+endif
+
+ifeq ($(STMF), 103)
+
+C_SOURCES =  \
+src/main.c \
+Drivers/Config/Src/stm32f1xx_it.c \
+Drivers/Config/Src/stm32f1xx_hal_msp.c \
+Drivers/Config/Src/system_stm32f1xx.c  \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
+
+# ASM sources
+ASM_SOURCES =  \
+startup_stm32f103xb.s
+
+C_INCLUDES =  \
+-IDrivers/STM32F1xx_HAL_Driver/Inc \
+-IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
+-IDrivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include \
+-IDrivers/stm32f103/CMSIS/Include \
+-IDrivers/Config/Include \
+-Iincludes
+
+C_DEFS =  \
+-DUSE_HAL_DRIVER \
+-DSTM32F103xB
+
+LDSCRIPT = STM32F103C8Tx_FLASH.ld
+
+endif
 
 #######################################
 # binaries
@@ -99,28 +159,20 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 AS_DEFS = 
 
 # C defines
-C_DEFS =  \
--DUSE_HAL_DRIVER \
--DSTM32F100xB
+
 
 
 # AS includes
 AS_INCLUDES = 
 
 # C includes
-C_INCLUDES =  \
--IDrivers/STM32F1xx_HAL_Driver/Inc \
--IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
--IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
--IDrivers/CMSIS/Include \
--IDrivers/Config/Include \
--Iincludes
+
 
 
 # compile gcc flags
-ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -Werror
 
-CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -Werror
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -135,7 +187,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = STM32F100RBTx_FLASH.ld
+
 
 # libraries
 LIBS = -lc -lm -lnosys 
