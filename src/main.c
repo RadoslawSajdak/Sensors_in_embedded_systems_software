@@ -2,18 +2,43 @@
 #include "stdio.h"
 #include "tools.h"
 #include "stm32f1xx_hal.h"
+#include "bmp280.h"
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 GPIO_InitTypeDef GPIO_InitStruct = {0};
+SPI_TypeDef spi1;
+GPIO_TypeDef spi_gpio;
 
+struct bmp280_raw_data test_data = {0};
 int main(void)
 {
 
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
+    if( 0 != bmp280_init(&spi1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+    if( 0 != bmp280_get_raw(&test_data)) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+    if(test_data.temperature == 0 || test_data.pressure == 0) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
     while(1)
     {
         HAL_Delay(1000);

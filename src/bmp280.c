@@ -12,7 +12,7 @@
 /***** Local variables *****/
 static SPI_HandleTypeDef        bmp_spi_dev;
 static GPIO_TypeDef             *bmp_cs_gpio = NULL;
-static uint16_t                 bmp_cs_pin = NULL;
+static uint16_t                 bmp_cs_pin = 0;
 struct bmp280_calib_digit       calib;
 
 

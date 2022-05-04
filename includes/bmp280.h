@@ -10,6 +10,8 @@
 #define __BMP280_H__
 
 /***** Includes *****/
+#include "stdint.h"
+#include "stm32f1xx.h"
 #include "tools.h"
 #include "bmp280_map.h"
 

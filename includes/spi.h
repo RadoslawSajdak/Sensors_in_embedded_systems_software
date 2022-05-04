@@ -3,6 +3,7 @@
 
 /***** Includes *****/
 #include "tools.h"
+#include "stm32f1xx.h"
 
 /***** Defines *****/
 #define SPI_REG_R(reg)  ((reg) | 0x80)
