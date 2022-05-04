@@ -64,7 +64,7 @@ typedef struct {
   *
   * @return 0 if success, else error number
   * **************************/
-enum retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, uint8_t addrPin, uint8_t farenheit);
+hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, uint8_t addrPin, uint8_t farenheit);
 
 /****************************
  * @brief Get the temperature reported
@@ -77,7 +77,7 @@ enum retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, uint8_t addrPin, uint8_t
  *
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_get_temperature(float* value, uint16_t configuration);
+hub_retcode_t sts3x_get_temperature(float* value, uint16_t configuration);
 
 /****************************
  * @brief Start the periodic temperature sampling
@@ -90,14 +90,14 @@ enum retcode_t sts3x_get_temperature(float* value, uint16_t configuration);
  *
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_start_periodic_acquisition(uint16_t configuration);
+hub_retcode_t sts3x_start_periodic_acquisition(uint16_t configuration);
 
 /****************************
  * @brief Stop the periodic temperature sampling.
  *
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_stop_periodic_acquisition();
+hub_retcode_t sts3x_stop_periodic_acquisition();
 
 /****************************
  * @brief Trigger a soft reset on sensor.
@@ -105,7 +105,7 @@ enum retcode_t sts3x_stop_periodic_acquisition();
  *
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_soft_reset();
+hub_retcode_t sts3x_soft_reset();
 
 /****************************
  * @brief Enable or disable the built-in sensor heater.
@@ -115,7 +115,7 @@ enum retcode_t sts3x_soft_reset();
  *        one of STS3X_HEATER_ defines.
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_set_heater_status(uint16_t heaterCommand);
+hub_retcode_t sts3x_set_heater_status(uint16_t heaterCommand);
 
 /****************************
  * @brief Fetch the sensor status register data.
@@ -125,7 +125,7 @@ enum retcode_t sts3x_set_heater_status(uint16_t heaterCommand);
  * @see STS3X_Status_Reg struct definition
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_get_status_register(STS3X_Status_Reg* statusRegister);
+hub_retcode_t sts3x_get_status_register(STS3X_Status_Reg* statusRegister);
 
 /****************************
  * @brief Clear the non-reserved status register bits.
@@ -133,5 +133,5 @@ enum retcode_t sts3x_get_status_register(STS3X_Status_Reg* statusRegister);
  *
  * @return 0 if success, else error number
  * **************************/
-enum retcode_t sts3x_clear_status_register();
+hub_retcode_t sts3x_clear_status_register();
 #endif

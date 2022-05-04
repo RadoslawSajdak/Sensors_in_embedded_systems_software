@@ -8,4 +8,13 @@
 #define TCK_SWCLK_Pin GPIO_PIN_14
 #define TCK_SWCLK_GPIO_Port GPIOA
 
+typedef enum {
+    OK = 0,
+    INIT_ERROR = 1,
+    BUSY_ERROR = 2,
+    TIMEOUT_ERROR = 3,
+    ARGUMENT_ERROR = 4,
+    CRC_ERROR = 5
+} hub_retcode_t;
+
 #endif

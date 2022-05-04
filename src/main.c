@@ -2,18 +2,38 @@
 #include "stdio.h"
 #include "tools.h"
 #include "stm32f1xx_hal.h"
+#include "sts3x_dis.h"
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 GPIO_InitTypeDef GPIO_InitStruct = {0};
+I2C_HandleTypeDef I2C_InitStruct = {.Init.
 
 int main(void)
 {
 
+    float test_temperature = 0.0f;
+
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
+    if(0 != sts3x_dis_init(&I2C_InitStruct, 0, 0)) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+
+    if(0 != sts3x_get_temperature(&test_temperature, STS3X_CSOFF_REPEATABILITY_HIGH)) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+
     while(1)
     {
         HAL_Delay(1000);
