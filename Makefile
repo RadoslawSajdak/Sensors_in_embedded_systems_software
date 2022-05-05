@@ -95,7 +95,7 @@ src/main.c \
 src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
-src/api.c
+src/api.c \
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
