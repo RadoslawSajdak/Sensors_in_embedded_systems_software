@@ -44,12 +44,10 @@ ifeq ($(STMF), 100)
 
 C_SOURCES =  \
 src/main.c \
-<<<<<<< HEAD
 src/spi.c \
 src/bmp280.c \
-=======
 src/debug_uart.c \
->>>>>>> feature/debug_uart
+src/api.c \
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -97,6 +95,7 @@ src/main.c \
 src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
+src/api.c
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -143,6 +142,7 @@ C_SOURCES =  \
 src/main.c \
 src/spi.c \
 src/bmp280.c \
+src/api.c \
 Drivers/Config/Src/stm32f4xx_it.c \
 Drivers/Config/Src/stm32f4xx_hal_msp.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
