@@ -82,7 +82,8 @@ C_INCLUDES =  \
 
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
--DSTM32F100xB
+-DSTM32F100xB \
+-DSTM32F1
 
 LDSCRIPT = STM32F100RBTx_FLASH.ld
 
@@ -143,6 +144,7 @@ src/main.c \
 src/spi.c \
 src/bmp280.c \
 src/api.c \
+src/debug_uart.c \
 Drivers/Config/Src/stm32f4xx_it.c \
 Drivers/Config/Src/stm32f4xx_hal_msp.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
