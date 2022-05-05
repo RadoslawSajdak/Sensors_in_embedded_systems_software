@@ -1,4 +1,3 @@
-
 /***** Includes *****/
 #include "example.h"
 #include "stdint.h"

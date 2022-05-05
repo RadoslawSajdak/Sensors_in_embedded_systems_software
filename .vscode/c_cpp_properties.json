@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "/home/roiz/Codes/Sensors_in_embedded_systems_software/includes",
+                "/home/roiz/Codes/Sensors_in_embedded_systems_software/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "/home/roiz/Codes/Sensors_in_embedded_systems_software/Drivers/Config/Include",
+                "/home/roiz/Codes/Sensors_in_embedded_systems_software/Drivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
