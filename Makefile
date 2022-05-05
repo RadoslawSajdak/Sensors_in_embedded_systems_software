@@ -36,7 +36,7 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
-ifeq ($(STMF),$(filter $(STMF),100 103))
+ifeq ($(STMF),$(filter $(STMF),100 103 429))
 $(info $(STMF))
 endif
 
@@ -48,6 +48,7 @@ src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
 src/api.c \
+src/api_uart.c \
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -97,6 +98,7 @@ src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
 src/api.c \
+src/api_uart.c \
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -145,6 +147,7 @@ src/spi.c \
 src/bmp280.c \
 src/api.c \
 src/debug_uart.c \
+src/api_uart.c \
 Drivers/Config/Src/stm32f4xx_it.c \
 Drivers/Config/Src/stm32f4xx_hal_msp.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \

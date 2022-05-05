@@ -11,6 +11,7 @@
 #endif
 
 #include "debug_uart.h"
+#include "api.h"
 
 static void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -25,29 +26,9 @@ int main(void)
         HAL_Init();
         SystemClock_Config();
         MX_GPIO_Init();
-        if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
-        for(uint8_t i = 0; i < 6; i ++)
-        {
-            HAL_Delay(200);
-            HAL_GPIO_TogglePin(LED_port, LED_pin);
-        }
-        HAL_Delay(2000);
-        if( 0 != bmp280_get_data(&test_data)) while(1);
-        for(uint8_t i = 0; i < 6; i ++)
-        {
-            HAL_Delay(200);
-            HAL_GPIO_TogglePin(LED_port, LED_pin);
-        }
-        HAL_Delay(2000);
-        if(test_data.temperature == 0 || test_data.pressure == 0) while(1);
-        for(uint8_t i = 0; i < 6; i ++)
-        {
-            HAL_Delay(200);
-            HAL_GPIO_TogglePin(LED_port, LED_pin);
-        }
-        HAL_Delay(2000);
         debug_uart_init(115200);
         init_done();
+        run_api();
         while(1)
         {
             HAL_Delay(300);

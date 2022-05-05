@@ -41,6 +41,10 @@
 #define DEBUG_UART_PORT             GPIOA
 #define DEBUG_UART_PIN              GPIO_PIN_2
 
+#define API_UART_PORT               GPIOA
+#define API_UART_TX_PIN             GPIO_PIN_9
+#define API_UART_RX_PIN             GPIO_PIN_10
+
 
 typedef enum {
     OK = 0,
