@@ -44,8 +44,12 @@ ifeq ($(STMF), 100)
 
 C_SOURCES =  \
 src/main.c \
+<<<<<<< HEAD
 src/spi.c \
 src/bmp280.c \
+=======
+src/debug_uart.c \
+>>>>>>> feature/debug_uart
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -63,6 +67,8 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
+
 
 # ASM sources
 ASM_SOURCES =  \
@@ -90,6 +96,7 @@ C_SOURCES =  \
 src/main.c \
 src/spi.c \
 src/bmp280.c \
+src/debug_uart.c \
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -107,6 +114,7 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 
 # ASM sources
 ASM_SOURCES =  \

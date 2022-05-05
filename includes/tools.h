@@ -38,5 +38,17 @@
 #define UART_RX_Pin     GPIO_PIN_10
 #define UART_RX_GPIO    GPIOA
 
+#define DEBUG_UART_PORT             GPIOA
+#define DEBUG_UART_PIN              GPIO_PIN_2
 
-#endif //__TOOLS_H__
+
+typedef enum {
+    OK = 0,
+    INIT_ERROR = 1,
+    BUSY_ERROR = 2,
+    TIMEOUT_ERROR = 3,
+    ARGUMENT_ERROR = 4
+} hub_retcode_t;
+
+
+#endif
