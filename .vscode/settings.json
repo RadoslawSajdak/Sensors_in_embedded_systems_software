@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "stm32f1xx_hal.h": "c"
+    },
+    "cortex-debug.gdbPath": "/usr/local/bin/arm-eabi-gdb",
+    "cortex-debug.stutilPath": "/usr/local/bin/st-util",
+}
