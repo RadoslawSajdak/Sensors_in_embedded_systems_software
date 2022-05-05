@@ -166,12 +166,14 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/stm32f429/CMSIS/Device/ST/STM32F4xx/Include \
+-IDrivers/stm32f429/CMSIS/Core/Include\
 -IDrivers/stm32f429/CMSIS/Include
 
 # C defines
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
--DSTM32F429xx
+-DSTM32F429xx \
+-DSTM32F4
 
 # link script
 LDSCRIPT = STM32F429ZITx_FLASH.ld

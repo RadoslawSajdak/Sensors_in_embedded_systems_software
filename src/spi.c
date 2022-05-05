@@ -55,24 +55,12 @@ ErrorStatus spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
     return ret;
 }
 
-ErrorStatus spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data)
-{
-    ErrorStatus ret = SUCCESS;
-
-    uint8_t buff = SPI_REG_R(reg);
-    CSB_low(CS_GPIO, CS_GPIO_Pin);
-    SPI_send(hspi1, &buff);
-    SPI_recv(hspi1, data);
-    CSB_high(CS_GPIO, CS_GPIO_Pin);
-
-    return ret;
-}
 
 ErrorStatus spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data)
 {
     ErrorStatus ret = SUCCESS;
     
-    uint8_t buff = SPI_REG_W(reg);
+    uint8_t buff = SPI_REG_W_M(reg);
     CSB_low(CS_GPIO, CS_GPIO_Pin);
     SPI_send(hspi1, &buff);
     SPI_send(hspi1, data);
@@ -82,14 +70,14 @@ ErrorStatus spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, ui
 }
 
 
-ErrorStatus spi_get_data(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data, size_t len)
+ErrorStatus spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data, uint8_t bytes_num)
 {
     ErrorStatus ret = SUCCESS;
 
     uint8_t buff = READ_REG(reg);
     CSB_low(CS_GPIO, CS_GPIO_Pin);
     SPI_send(hspi1, &buff);
-    for(size_t k = 0; k < len; k++) SPI_recv(hspi1, &data[k]); 
+    for(size_t k = 0; k < bytes_num; k++) SPI_recv(hspi1, &data[k]); 
     CSB_high(CS_GPIO, CS_GPIO_Pin);
 
     return ret;

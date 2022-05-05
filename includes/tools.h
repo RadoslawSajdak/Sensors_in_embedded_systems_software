@@ -2,8 +2,6 @@
 #define __TOOLS_H__
 
 /***** Boards *****/
-#define STM32F4
-//#define STM32F1
 
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
@@ -35,4 +33,4 @@
 #define UART_RX_GPIO    GPIOA
 
 
-#endif
+#endif //__TOOLS_H__

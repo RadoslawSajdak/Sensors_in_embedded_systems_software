@@ -20,15 +20,9 @@
 #include "stm32f4xx_hal.h"
 #endif
 
-/***** Defines *****/
-#define BMP280_SET_BIT(reg, bit)    reg |= bit 
 
-/***** Custom types *****/
-typedef int32_t     BMP280_S32_t;
-typedef uint32_t    BMP280_U32_t;
-typedef int64_t     BMP280_S64_t;
 /***** Data types *****/
-struct bmp280_calib_digit
+typedef struct 
 {
     /* Temperature calibration */
     uint16_t dig_t1;
@@ -37,27 +31,27 @@ struct bmp280_calib_digit
     /* Pressure calibration */
     uint16_t dig_p1;
     int16_t dig_p2, dig_p3, dig_p4, dig_p5, dig_p6, dig_p7, dig_p8, dig_p9, dig_p10;
-};
+} bmp280_calib_digit_s;
 
-struct bmp280_config
+typedef struct 
 {
-    uint8_t osrs_t;     // temperature sampling
-    uint8_t osrs_p;     // pressure sampling
-    uint8_t sb;         // standby
+    uint8_t osrs_temperature;       // temperature sampling
+    uint8_t osrs_pressure;          // pressure sampling
+    uint8_t standby;                // standby
     uint8_t mode;       
-};
+} bmp280_config_s ;
 
-struct bmp280_raw_data
+typedef struct
 {
-    BMP280_S32_t temperature;
-    BMP280_S32_t pressure;
-};
+    int32_t temperature;
+    int32_t pressure;
+} bmp280_raw_data_s;
 
-struct bmp280_data
+typedef struct
 {
-    BMP280_S32_t temperature;
-    BMP280_U32_t pressure;
-};
+    int32_t temperature;
+    uint32_t pressure;
+} bmp280_data_s;
 
 
 /****************************
@@ -92,7 +86,7 @@ ErrorStatus bmp280_reset(void);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_config(struct bmp280_config *conf);
+ErrorStatus bmp280_get_config(bmp280_config_s *conf);
 
 /****************************
  * @brief Set config
@@ -101,7 +95,7 @@ ErrorStatus bmp280_get_config(struct bmp280_config *conf);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_set_config(struct bmp280_config *conf);
+ErrorStatus bmp280_set_config(bmp280_config_s *conf);
 
 /****************************
  * @brief Wait till sensor will be ready
@@ -117,7 +111,7 @@ ErrorStatus bmp280_ready(void);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_raw(struct bmp280_raw_data *raw);
+ErrorStatus bmp280_get_raw(bmp280_raw_data_s *raw);
 
 /****************************
  * @brief Get compensated data
@@ -126,7 +120,7 @@ ErrorStatus bmp280_get_raw(struct bmp280_raw_data *raw);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_data(struct bmp280_data *data);
+ErrorStatus bmp280_get_data(bmp280_data_s *data);
 
 /****************************
  * @brief Compensate raw data
@@ -136,6 +130,6 @@ ErrorStatus bmp280_get_data(struct bmp280_data *data);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_compensate(struct bmp280_raw_data *raw, struct bmp280_data *data);
+ErrorStatus bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data);
 
-#endif
+#endif //__BMP280_H__

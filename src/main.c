@@ -16,7 +16,7 @@ GPIO_InitTypeDef GPIO_InitStruct = {0};
 SPI_TypeDef spi1;
 GPIO_TypeDef spi_gpio;
 
-struct bmp280_raw_data test_data = {0};
+bmp280_data_s test_data = {0};
 int main(void)
 {
 
@@ -30,7 +30,7 @@ int main(void)
         HAL_GPIO_TogglePin(LED_port, LED_pin);
     }
     HAL_Delay(2000);
-    if( 0 != bmp280_get_raw(&test_data)) while(1);
+    if( 0 != bmp280_get_data(&test_data)) while(1);
     for(uint8_t i = 0; i < 6; i ++)
     {
         HAL_Delay(200);
