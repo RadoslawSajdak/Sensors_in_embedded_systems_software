@@ -3,7 +3,7 @@
 #include "bmp280.h"
 #include "spi.h"
 #include <string.h>
-
+#include <stdint.h>
 
 /***** Defines *****/
 #define BMP280_READ_M(reg, data, len)         (ret |= (spi_get_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data, len)))
