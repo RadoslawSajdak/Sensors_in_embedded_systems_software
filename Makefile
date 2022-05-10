@@ -36,18 +36,31 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
-ifeq ($(STMF),$(filter $(STMF),100 103))
-$(info $(STMF))
-endif
 
-ifeq ($(STMF), 100)
-
-C_SOURCES =  \
+C_COMMON_SRC = \
 src/main.c \
 src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
-src/api.c \
+src/api.c 
+
+######################################
+# ^^^^^^ SETTINGS - adding libs ^^^^^^
+# VVVVVV DO NOT MODIFY VVVVV
+######################################
+
+ifeq ($(STMF),)
+$(warning No STM version specified)
+$(info Usage: >> make STMF={board})
+$(info Available boards: 100, 103, 429)
+$(info )
+$(error No board specified.;\n)
+endif
+
+ifeq ($(STMF),$(filter $(STMF),100 103))
+
+C_SOURCES =  \
+$(C_COMMON_SRC)\
 Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
@@ -65,8 +78,11 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c 
 
+endif
+
+ifeq ($(STMF), 100)
 
 # ASM sources
 ASM_SOURCES =  \
@@ -90,31 +106,6 @@ LDSCRIPT = STM32F100RBTx_FLASH.ld
 endif
 
 ifeq ($(STMF), 103)
-
-C_SOURCES =  \
-src/main.c \
-src/spi.c \
-src/bmp280.c \
-src/debug_uart.c \
-src/api.c \
-Drivers/Config/Src/stm32f1xx_it.c \
-Drivers/Config/Src/stm32f1xx_hal_msp.c \
-Drivers/Config/Src/system_stm32f1xx.c  \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
-Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 
 # ASM sources
 ASM_SOURCES =  \
@@ -140,11 +131,7 @@ endif
 ifeq ($(STMF), 429)
 
 C_SOURCES =  \
-src/main.c \
-src/spi.c \
-src/bmp280.c \
-src/api.c \
-src/debug_uart.c \
+$(C_COMMON_SRC)\
 Drivers/Config/Src/stm32f4xx_it.c \
 Drivers/Config/Src/stm32f4xx_hal_msp.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
