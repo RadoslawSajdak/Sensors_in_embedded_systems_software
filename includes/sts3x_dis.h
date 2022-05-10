@@ -11,38 +11,42 @@
 #define __STS3X_DIS_H__
 
 #include "stdint.h"
+#include "stdbool.h"
 #include "tools.h"
 #include "stm32f1xx.h"
 
-// Defines for single shot measurements without clock streching
-#define STS3X_CSOFF_REPEATABILITY_LOW 0x2416
-#define STS3X_CSOFF_REPEATABILITY_MEDIUM 0x240B
-#define STS3X_CSOFF_REPEATABILITY_HIGH 0x2400
-#define STS3X_PERIODIC_READ 0xE000
+// Enum for heater configuration commands
+typedef enum {
+  STS3X_HEATER_ENABLE = 0x306D,
+  STS3X_HEATER_DISABLE = 0x3066
+} sts3x_heater_config_t;
 
-// Defines for periodic measurement configurations
-#define STS3X_PERIODIC_05MPS_REP_LOW 0x202F
-#define STS3X_PERIODIC_05MPS_REP_MEDIUM 0x2024
-#define STS3X_PERIODIC_05MPS_REP_HIGH 0x2032
+// Enum for single shot measurements without clock streching
+typedef enum {
+  REPEATABILITY_LOW = 0x2416,
+  REPEATABILITY_MEDIUM = 0x240B,
+  REPEATABILITY_HIGH = 0x2400,
+  PERIODIC_READ = 0xE000
+} measurement_config_t;
 
-#define STS3X_PERIODIC_1MPS_REP_LOW 0x212D
-#define STS3X_PERIODIC_1MPS_REP_MEDIUM 0x2126
-#define STS3X_PERIODIC_1MPS_REP_HIGH 0x2130
-
-#define STS3X_PERIODIC_2MPS_REP_LOW 0x222B
-#define STS3X_PERIODIC_2MPS_REP_MEDIUM 0x2220
-#define STS3X_PERIODIC_2MPS_REP_HIGH 0x2236
-
-#define STS3X_PERIODIC_4MPS_REP_LOW 0x2329
-#define STS3X_PERIODIC_4MPS_REP_MEDIUM 0x2322
-#define STS3X_PERIODIC_4MPS_REP_HIGH 0x2334
-
-#define STS3X_PERIODIC_10MPS_REP_LOW 0x272A
-#define STS3X_PERIODIC_10MPS_REP_MEDIUM 0x2721
-#define STS3X_PERIODIC_10MPS_REP_HIGH 0x2737
-
-#define STS3X_HEATER_ENABLE 0x306D
-#define STS3X_HEATER_DISABLE 0x3066
+// Enum for periodic measurement configurations
+typedef enum {
+  REP_LOW_05MPS = 0x202F,
+  REP_MEDIUM_05MPS = 0x2024,
+  REP_HIGH_05MPS = 0x2032,
+  REP_LOW_1MPS = 0x212D,
+  REP_MEDIUM_1MPS = 0x2126,
+  REP_HIGH_1MPS = 0x2130,
+  REP_LOW_2MPS = 0x222B,
+  REP_MEDIUM_2MPS = 0x2220,
+  REP_HIGH_2MPS = 0x2236,
+  REP_LOW_4MPS = 0x2329,
+  REP_MEDIUM_4MPS = 0x2322,
+  REP_HIGH_4MPS = 0x2334,
+  REP_LOW_10MPS = 0x272A,
+  REP_MEDIUM_10MPS = 0x2721,
+  REP_HIGH_10MPS = 0x2737
+} periodic_measurement_config_t;
 
 // Any non-zero state of the member should be treated as HIGH.
 typedef struct {
@@ -59,25 +63,24 @@ typedef struct {
   * Must be called before anything else!
   *
   * @param hi2c1 pointer to i2c device
-  * @param addr_pin state of ADDR pin on sensor, 0 is LOW, anything else is HIGH
-  * @param farenheit - set this to 1 to report temperature in Farenheit instead of Celsius
+  * @param addr_pin state of ADDR pin on sensor, false is LOW, true is HIGH
+  * @param farenheit - set this to true to report temperature in Farenheit instead of Celsius
   *
   * @return 0 if success, else error number
   * **************************/
-hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, uint8_t addrPin, uint8_t farenheit);
+hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenheit);
 
 /****************************
  * @brief Get the temperature reported
  * by the sensor in units specified in sts3x_dis_init()
  *
  * @param value pointer to where measurement is to be written to
- * @param configuration - measurement configuration,
- *        one of STS3X_CSOFF_REPEATABILITY_ defines (or STS3X_PERIODIC_READ
- *        if periodic measurements were previously enabled)
+ * @param configuration - measurement configuration, member of 
+ *         measurement_config_t enum (PERIODIC_READ only if periodic measurements were previously enabled)
  *
  * @return 0 if success, else error number
  * **************************/
-hub_retcode_t sts3x_get_temperature(float* value, uint16_t configuration);
+hub_retcode_t sts3x_get_temperature(float* value, measurement_config_t configuration);
 
 /****************************
  * @brief Start the periodic temperature sampling
@@ -85,12 +88,11 @@ hub_retcode_t sts3x_get_temperature(float* value, uint16_t configuration);
  * This only tells the sensor to sample not on demand, but periodically.
  * To read the periodic data, @see sts3x_get_temperature
  *
- * @param configuration - measurement configuration,
- *        one of STS3X_PERIODIC_XMPS defines
+ * @param configuration - measurement configuration, member of periodic_measurement_config_t enum
  *
  * @return 0 if success, else error number
  * **************************/
-hub_retcode_t sts3x_start_periodic_acquisition(uint16_t configuration);
+hub_retcode_t sts3x_start_periodic_acquisition(periodic_measurement_config_t configuration);
 
 /****************************
  * @brief Stop the periodic temperature sampling.
@@ -111,11 +113,10 @@ hub_retcode_t sts3x_soft_reset();
  * @brief Enable or disable the built-in sensor heater.
  * @see Sensirion STS3X-DIS October 2019 V5 documentation, section 4.9
  *
- * @param heaterCommand - command to enable/disable the heater,
- *        one of STS3X_HEATER_ defines.
+ * @param heaterCommand - member of sts3x_heater_config_t enum
  * @return 0 if success, else error number
  * **************************/
-hub_retcode_t sts3x_set_heater_status(uint16_t heaterCommand);
+hub_retcode_t sts3x_set_heater_status(sts3x_heater_config_t heaterCommand);
 
 /****************************
  * @brief Fetch the sensor status register data.

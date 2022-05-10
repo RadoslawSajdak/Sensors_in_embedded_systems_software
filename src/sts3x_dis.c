@@ -1,23 +1,26 @@
 #include "sts3x_dis.h"
 #include "stdint.h"
+#include "stdbool.h"
 #include "stm32f1xx.h"
 #include "tools.h"
 
 /***** Defines *****/
-#define I2C_read_M(data_p, len) (ret = (HAL_I2C_Master_Receive(g_i2c_dev, device_address, (uint8_t *)data_p, len, 500)))
-#define I2C_write_M(data_p) (ret = (HAL_I2C_Master_Transmit(g_i2c_dev, device_address, (uint8_t *)data_p, 2, 500)))
+#define I2C_read_M(data_p, len)  ((hub_retcode_t) (HAL_I2C_Master_Receive(g_i2c_dev, device_address, (uint8_t *)data_p, len, 500)))
+#define I2C_write_M(data_p) ((hub_retcode_t) (HAL_I2C_Master_Transmit(g_i2c_dev, device_address, (uint8_t *)data_p, 2, 500)))
+
+// Values for CRC calculation
+#define STS3X_CRC_POLYNOMIAL 0x31;
+#define STS3X_CRC_INITIAL 0xFF;
+#define STS3X_CRC_FINAL_XOR 0x00;
 
 /***** Local variables *****/
 static I2C_HandleTypeDef* g_i2c_dev = NULL;
 static uint8_t device_address = 0x4A;
 static uint8_t offset = 45;
 static uint16_t multiplier = 175;
-static uint8_t periodicEnabled = 0;
+static bool periodicEnabled = false;
 
-// Values for CRC calculation
-static const uint8_t crc_polynomial = 0x31;
-static const uint8_t crc_initial = 0xFF;
-static const uint8_t crc_final_xor = 0x00;
+static uint8_t sts3x_crc(uint16_t input);
 
 /****************************
  * @brief Calculate the CRC8 for a 2-byte input,
@@ -30,58 +33,65 @@ static const uint8_t crc_final_xor = 0x00;
  * @return CRC8 for input data
  * **************************/
 static uint8_t sts3x_crc(uint16_t input) {
-    uint8_t crc = crc_initial;
+    uint8_t crc = STS3X_CRC_INITIAL;
 
     crc ^= (input & 0xFF00) >> 8;
     for (uint8_t bit = 8; bit > 0; --bit) {
-        if (crc & 0x80) crc = (crc << 1) ^ crc_polynomial;
-        else crc = (crc << 1);
+        if (crc & 0x80) {
+            crc = (crc << 1) ^ STS3X_CRC_POLYNOMIAL;
+        }
+        else {
+            crc = (crc << 1);
+        } 
     }
     crc ^= (input & 0xFF);
     for (uint8_t bit = 8; bit > 0; --bit) {
-        if (crc & 0x80) crc = (crc << 1) ^ crc_polynomial;
-        else crc = (crc << 1);
+        if (crc & 0x80) {
+            crc = (crc << 1) ^ STS3X_CRC_POLYNOMIAL;
+        }
+        else {
+            crc = (crc << 1);
+        } 
     }
 
-    return crc ^ crc_final_xor;
+    return crc ^ STS3X_CRC_FINAL_XOR;
 };
 
 
 /***** Global functions definitions *****/
 
-hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef* hi2c1, uint8_t addr_pin, uint8_t farenheit)
+hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenheit)
 {
     g_i2c_dev = hi2c1;
     float f;
 
     // The device address depends on the state of ADDR pin
-    if (addr_pin > 0) device_address = 0x4B;
+    if (addrPin) device_address = 0x4B;
 
     // Change processing params if Farenheit output is enabled
-    if (farenheit > 0) {
+    if (farenheit) {
         offset = 49;
         multiplier = 315;
     }
 
     if (OK != (hub_retcode_t)HAL_I2C_Init(g_i2c_dev)) return INIT_ERROR;
    
-    return sts3x_get_temperature(&f, STS3X_CSOFF_REPEATABILITY_LOW); // We return success if we CONFIRM communication
+    return sts3x_get_temperature(&f, REPEATABILITY_LOW); // We return success if we CONFIRM communication
 }
 
-hub_retcode_t sts3x_get_temperature(float* value, uint16_t configuration)
-{
+hub_retcode_t sts3x_get_temperature(float* value, measurement_config_t configuration) {
     hub_retcode_t ret = OK;
     uint8_t retryCount = 5;
     uint8_t responseBuf[3];
 
     // Check if periodic measurements were enabled if a periodic read was requested
-    if (configuration == STS3X_PERIODIC_READ && periodicEnabled != 1) return ERROR;
-    if (OK != I2C_write_M(&configuration)) return ERROR;
+    if (configuration == PERIODIC_READ && !periodicEnabled) return ERROR;
+    if (OK != I2C_write_M((uint16_t*) &configuration)) return ERROR;
 
     // Sensor responds with NACK until the data is ready, which results in HAL_ERROR
     // (Retry count might have to be higher, maybe better with timer dependent on measurement repeatability)
     do {
-        (hub_retcode_t)I2C_read_M(responseBuf, 3);
+        ret = I2C_read_M(responseBuf, 3);
         retryCount--;
     } while (ret != OK && retryCount != 0);
 
@@ -94,39 +104,43 @@ hub_retcode_t sts3x_get_temperature(float* value, uint16_t configuration)
     return ret;
 }
 
-hub_retcode_t sts3x_start_periodic_acquisition(uint16_t configuration) {
+hub_retcode_t sts3x_start_periodic_acquisition(periodic_measurement_config_t configuration)
+{
     hub_retcode_t ret = OK;
-    I2C_write_M(&configuration);
+    ret = I2C_write_M((uint16_t*) &configuration);
+    if (ret == OK) periodicEnabled = true;
     return ret;
 }
 
 hub_retcode_t sts3x_stop_periodic_acquisition() {
     hub_retcode_t ret = OK;
     uint16_t command = 0x3093;
-    I2C_write_M(&command);
+    ret = I2C_write_M(&command);
+    if (ret == OK) periodicEnabled = false;
     return ret;
 }
 
 hub_retcode_t sts3x_soft_reset() {
     hub_retcode_t ret = OK;
     uint16_t command = 0x30A2;
-    I2C_write_M(&command);
+    ret = I2C_write_M(&command);
+    if (ret == OK) periodicEnabled = false;
     return ret;
 }
 
-hub_retcode_t sts3x_set_heater_status(uint16_t heater_command) {
+hub_retcode_t sts3x_set_heater_status(sts3x_heater_config_t heaterCommand) {
     hub_retcode_t ret = OK;
-    I2C_write_M(&heater_command);
+    ret = I2C_write_M((uint16_t*) &heaterCommand);
     return ret;
 }
 
-hub_retcode_t sts3x_get_status_register(STS3X_Status_Reg *statusRegister) {
+hub_retcode_t sts3x_get_status_register(STS3X_Status_Reg* statusRegister) {
     hub_retcode_t ret = OK;
     uint16_t command = 0xF32D;
     uint8_t buf[3];
 
     if (OK != I2C_write_M(&command)) return ERROR;
-    if (OK != I2C_read_M(&buf, 3)) return ERROR;
+    if (OK != I2C_read_M(buf, 3)) return ERROR;
     
     if (sts3x_crc((uint16_t) ((buf[0] << 8) + buf[1])) != buf[2]) return CRC_ERROR;
 
@@ -144,6 +158,6 @@ hub_retcode_t sts3x_get_status_register(STS3X_Status_Reg *statusRegister) {
 hub_retcode_t sts3x_clear_status_register() {
     hub_retcode_t ret = OK;
     uint16_t command = 0x3041;
-    I2C_write_M(&command);
+    ret = I2C_write_M(&command);
     return ret;
 }

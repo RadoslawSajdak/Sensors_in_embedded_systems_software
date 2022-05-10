@@ -6,9 +6,10 @@
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void I2C_Init(void);
 
 GPIO_InitTypeDef GPIO_InitStruct = {0};
-I2C_HandleTypeDef I2C_InitStruct = {.Init.
+I2C_HandleTypeDef I2C_InitStruct;
 
 int main(void)
 {
@@ -18,6 +19,7 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
+    I2C_Init();
     if(0 != sts3x_dis_init(&I2C_InitStruct, 0, 0)) while(1);
     for(uint8_t i = 0; i < 6; i ++)
     {
@@ -26,7 +28,7 @@ int main(void)
     }
     HAL_Delay(2000);
 
-    if(0 != sts3x_get_temperature(&test_temperature, STS3X_CSOFF_REPEATABILITY_HIGH)) while(1);
+    if(0 != sts3x_get_temperature(&test_temperature, REPEATABILITY_LOW)) while(1);
     for(uint8_t i = 0; i < 6; i ++)
     {
         HAL_Delay(200);
@@ -92,4 +94,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_port, &GPIO_InitStruct);
 
+}
+
+static void I2C_Init(void)
+{
+  I2C_InitStruct.Instance             = I2C1;
+	I2C_InitStruct.Init.ClockSpeed      = 100000;
+	I2C_InitStruct.Init.DutyCycle       = I2C_DUTYCYCLE_2;
+	I2C_InitStruct.Init.OwnAddress1     = 0xff;
+	I2C_InitStruct.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+	I2C_InitStruct.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	I2C_InitStruct.Init.OwnAddress2     = 0xff;
+	I2C_InitStruct.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	I2C_InitStruct.Init.NoStretchMode   = I2C_NOSTRETCH_DISABLE;
 }
