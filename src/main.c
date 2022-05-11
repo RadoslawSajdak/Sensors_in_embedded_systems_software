@@ -9,7 +9,7 @@ static void MX_GPIO_Init(void);
 static void I2C_Init(void);
 
 GPIO_InitTypeDef GPIO_InitStruct = {0};
-I2C_HandleTypeDef I2C_InitStruct;
+I2C_HandleTypeDef I2C_InitStruct = {0};
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
     SystemClock_Config();
     MX_GPIO_Init();
     I2C_Init();
-    if(0 != sts3x_dis_init(&I2C_InitStruct, 0, 0)) while(1);
+    if(0 != sts3x_dis_init(&I2C_InitStruct, false, false)) while(1);
     for(uint8_t i = 0; i < 6; i ++)
     {
         HAL_Delay(200);
@@ -94,12 +94,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_port, &GPIO_InitStruct);
 
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+	GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;		// SCL, SDA
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
 
 static void I2C_Init(void)
 {
+  __HAL_RCC_I2C1_CLK_ENABLE();
   I2C_InitStruct.Instance             = I2C1;
-	I2C_InitStruct.Init.ClockSpeed      = 100000;
+	I2C_InitStruct.Init.ClockSpeed      = 400000;
 	I2C_InitStruct.Init.DutyCycle       = I2C_DUTYCYCLE_2;
 	I2C_InitStruct.Init.OwnAddress1     = 0xff;
 	I2C_InitStruct.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
@@ -107,4 +114,6 @@ static void I2C_Init(void)
 	I2C_InitStruct.Init.OwnAddress2     = 0xff;
 	I2C_InitStruct.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 	I2C_InitStruct.Init.NoStretchMode   = I2C_NOSTRETCH_DISABLE;
+
+  HAL_I2C_Init(&I2C_InitStruct);
 }

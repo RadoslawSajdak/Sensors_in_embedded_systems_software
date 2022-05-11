@@ -5,8 +5,8 @@
 #include "tools.h"
 
 /***** Defines *****/
-#define I2C_read_M(data_p, len)  ((hub_retcode_t) (HAL_I2C_Master_Receive(g_i2c_dev, device_address, (uint8_t *)data_p, len, 500)))
-#define I2C_write_M(data_p) ((hub_retcode_t) (HAL_I2C_Master_Transmit(g_i2c_dev, device_address, (uint8_t *)data_p, 2, 500)))
+#define I2C_read_M(data_p, len)  ((hub_retcode_t) (HAL_I2C_Master_Receive(g_i2c_dev, device_address, (uint8_t *)data_p, len, HAL_MAX_DELAY)))
+#define I2C_write_M(data_p) ((hub_retcode_t) (HAL_I2C_Master_Transmit(g_i2c_dev, device_address, (uint8_t *)data_p, 2, HAL_MAX_DELAY)))
 
 // Values for CRC calculation
 #define STS3X_CRC_POLYNOMIAL 0x31;
@@ -15,7 +15,7 @@
 
 /***** Local variables *****/
 static I2C_HandleTypeDef* g_i2c_dev = NULL;
-static uint8_t device_address = 0x4A;
+static uint8_t device_address = 0x4A << 1;
 static uint8_t offset = 45;
 static uint16_t multiplier = 175;
 static bool periodicEnabled = false;
@@ -66,7 +66,7 @@ hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenh
     float f;
 
     // The device address depends on the state of ADDR pin
-    if (addrPin) device_address = 0x4B;
+    if (addrPin) device_address = 0x4B << 1;
 
     // Change processing params if Farenheit output is enabled
     if (farenheit) {
@@ -74,7 +74,7 @@ hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenh
         multiplier = 315;
     }
 
-    if (OK != (hub_retcode_t)HAL_I2C_Init(g_i2c_dev)) return INIT_ERROR;
+    //if (OK != (hub_retcode_t)HAL_I2C_Init(g_i2c_dev)) return INIT_ERROR;
    
     return sts3x_get_temperature(&f, REPEATABILITY_LOW); // We return success if we CONFIRM communication
 }
