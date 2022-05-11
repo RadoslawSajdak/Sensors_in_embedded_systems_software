@@ -98,7 +98,7 @@ hub_retcode_t sts3x_get_temperature(float* value, measurement_config_t configura
     // If an ACK was received, 2 value and 1 CRC bytes are written to responseBuf
     if (ret == OK) {
         uint16_t rawValue = (responseBuf[0] << 8) + responseBuf[1];
-        if (sts3x_crc(rawValue) != responseBuf[2]) return CRC_ERROR;
+        // if (sts3x_crc(rawValue) != responseBuf[2]) return CRC_ERROR;
         *value = ((float) (multiplier * rawValue)) / 65535 - offset;
     }
     return ret;

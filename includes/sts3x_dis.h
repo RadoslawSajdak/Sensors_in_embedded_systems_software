@@ -17,35 +17,35 @@
 
 // Enum for heater configuration commands
 typedef enum {
-  STS3X_HEATER_ENABLE = 0x306D,
-  STS3X_HEATER_DISABLE = 0x3066
+  STS3X_HEATER_ENABLE = 0x6D30,
+  STS3X_HEATER_DISABLE = 0x6630
 } sts3x_heater_config_t;
 
 // Enum for single shot measurements without clock streching
 typedef enum {
-  REPEATABILITY_LOW = 0x2416,
-  REPEATABILITY_MEDIUM = 0x240B,
-  REPEATABILITY_HIGH = 0x2400,
-  PERIODIC_READ = 0xE000
+  REPEATABILITY_LOW = 0x1624,
+  REPEATABILITY_MEDIUM = 0x0B24,
+  REPEATABILITY_HIGH = 0x0024,
+  PERIODIC_READ = 0x00E0
 } measurement_config_t;
 
 // Enum for periodic measurement configurations
 typedef enum {
-  REP_LOW_05MPS = 0x202F,
-  REP_MEDIUM_05MPS = 0x2024,
-  REP_HIGH_05MPS = 0x2032,
-  REP_LOW_1MPS = 0x212D,
-  REP_MEDIUM_1MPS = 0x2126,
-  REP_HIGH_1MPS = 0x2130,
-  REP_LOW_2MPS = 0x222B,
-  REP_MEDIUM_2MPS = 0x2220,
-  REP_HIGH_2MPS = 0x2236,
-  REP_LOW_4MPS = 0x2329,
-  REP_MEDIUM_4MPS = 0x2322,
-  REP_HIGH_4MPS = 0x2334,
-  REP_LOW_10MPS = 0x272A,
-  REP_MEDIUM_10MPS = 0x2721,
-  REP_HIGH_10MPS = 0x2737
+  REP_LOW_05MPS = 0x2F20,
+  REP_MEDIUM_05MPS = 0x2420,
+  REP_HIGH_05MPS = 0x3220,
+  REP_LOW_1MPS = 0x2D21,
+  REP_MEDIUM_1MPS = 0x2621,
+  REP_HIGH_1MPS = 0x3021,
+  REP_LOW_2MPS = 0x2B22,
+  REP_MEDIUM_2MPS = 0x2022,
+  REP_HIGH_2MPS = 0x3622,
+  REP_LOW_4MPS = 0x2923,
+  REP_MEDIUM_4MPS = 0x2223,
+  REP_HIGH_4MPS = 0x3423,
+  REP_LOW_10MPS = 0x2A27,
+  REP_MEDIUM_10MPS = 0x2127,
+  REP_HIGH_10MPS = 0x3727
 } periodic_measurement_config_t;
 
 // Any non-zero state of the member should be treated as HIGH.
