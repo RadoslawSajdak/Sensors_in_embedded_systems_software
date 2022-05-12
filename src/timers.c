@@ -18,9 +18,6 @@ static uint8_t g_registered_callbacks = 0;
 static volatile uint32_t g_systick = 0;
 
 
-
-
-
 /***** Global functions definitions *****/
 
 hub_retcode_t timers_add_timer(uint32_t timeout, timer_callback callback, bool repeat)
@@ -28,6 +25,24 @@ hub_retcode_t timers_add_timer(uint32_t timeout, timer_callback callback, bool r
     if(timeout > MAX_SYSTICK_VALUE) return ARGUMENT_ERROR;
     if (g_registered_callbacks >= MAX_TIMERS ) return NO_TIMERS_ERROR;
     registered_callback_s *current = g_head;
+
+    while (current != NULL)
+    {
+        if(current->callback == callback)
+        {
+            current->ticks_at_start = g_systick;
+            current->timeout = timeout;
+            current->repeat = repeat;
+
+            return OK;
+        }
+
+        current = current->next_element;
+    }
+
+    //Not found, so add another
+    current = g_head;
+    
 
     if(current == NULL)
     {
@@ -97,6 +112,7 @@ void SysTick_Handler(void)
         {
             current->callback();
             if(current->repeat) current->ticks_at_start = g_systick;
+            else timers_stop_timer(current->callback);
         }
         current = current->next_element;
     }
