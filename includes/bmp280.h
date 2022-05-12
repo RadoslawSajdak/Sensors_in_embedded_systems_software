@@ -63,7 +63,7 @@ typedef struct
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin);
+hub_retcode_t bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin);
 
 /****************************
  * @brief Get calibration data 
@@ -71,14 +71,14 @@ ErrorStatus bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_calib(void);
+hub_retcode_t bmp280_get_calib(void);
 
 /****************************
  * @brief Software reset 
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_reset(void);
+hub_retcode_t bmp280_reset(void);
 
 /****************************
  * @brief Get sensor config. 
@@ -87,7 +87,7 @@ ErrorStatus bmp280_reset(void);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_config(bmp280_config_s *conf);
+hub_retcode_t bmp280_get_config(bmp280_config_s *conf);
 
 /****************************
  * @brief Set config
@@ -96,14 +96,14 @@ ErrorStatus bmp280_get_config(bmp280_config_s *conf);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_set_config(bmp280_config_s *conf);
+hub_retcode_t bmp280_set_config(bmp280_config_s *conf);
 
 /****************************
  * @brief Wait till sensor will be ready
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_ready(void);
+hub_retcode_t bmp280_ready(void);
 
 /****************************
  * @brief Get raw sensor value
@@ -112,7 +112,7 @@ ErrorStatus bmp280_ready(void);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_raw(bmp280_raw_data_s *raw);
+hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw);
 
 /****************************
  * @brief Get compensated data
@@ -121,7 +121,7 @@ ErrorStatus bmp280_get_raw(bmp280_raw_data_s *raw);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_get_data(bmp280_data_s *data);
+hub_retcode_t bmp280_get_data(bmp280_data_s *data);
 
 /****************************
  * @brief Compensate raw data
@@ -131,6 +131,6 @@ ErrorStatus bmp280_get_data(bmp280_data_s *data);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data);
+hub_retcode_t bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data);
 
 #endif //__BMP280_H__
