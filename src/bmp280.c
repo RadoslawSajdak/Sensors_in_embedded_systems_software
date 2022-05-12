@@ -5,6 +5,14 @@
 #include <string.h>
 #include <stdint.h>
 
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx_hal.h"
+#include "stm32f429xx.h"
+#endif
+
 /***** Defines *****/
 #define BMP280_READ_M(reg, data, len)         (ret |= (spi_get_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data, len)))
 #define BMP280_WRITE_M(reg, data)             (ret |= (spi_set_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data)))

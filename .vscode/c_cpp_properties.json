@@ -7,15 +7,15 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "${projectPath}/includes",
-                "${projectPath}/stm32f429/CMSIS/Include",
-                "${projectPath}/Drivers/STM32F4xx_HAL_Driver/Inc",
-                "${projectPath}/Drivers/stm32f429/CMSIS/Device/ST/STM32F4xx/Include",
-                "${projectPath}/Drivers/Config/Include",
-                "${projectPath}/Drivers/stm32f103/CMSIS/Include",
-                "${projectPath}/Drivers/STM32F1xx_HAL_Driver/Inc",
-                "${projectPath}/Drivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include",
-                "${projectPath}/Drivers/Config/Include"
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/Drivers/stm32f429/CMSIS/Include",
+                "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/stm32f429/CMSIS/Device/ST/STM32F4xx/Include",
+                "${workspaceFolder}/Drivers/Config/Include",
+                "${workspaceFolder}/Drivers/stm32f103/CMSIS/Include",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include",
+                "${workspaceFolder}/Drivers/Config/Include"
             ],
             "defines": [
                 "STM32F4"
