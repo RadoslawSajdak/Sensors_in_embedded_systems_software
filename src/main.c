@@ -51,6 +51,7 @@ int main(void)
     while(1)
     {
         if(a == 15) timers_stop_timer(test_callback);
+        if(a == 10){ timers_add_timer(500, test_callback, true); a++;}
         if(b == 3) timers_stop_timer(test_callback2);
     }
 }

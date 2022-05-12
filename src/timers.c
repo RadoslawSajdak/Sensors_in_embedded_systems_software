@@ -1,8 +1,11 @@
+/***** Includes *****/
 #include "timers.h"
 #include "stdlib.h"
 
+/***** Defines *****/
 #define MAX_TIMERS                          10
 #define MAX_SYSTICK_VALUE                   4294967295
+
 
 typedef struct registered_callback
 {
@@ -13,12 +16,18 @@ typedef struct registered_callback
     struct registered_callback *next_element;
 }registered_callback_s;
 
+/***** Local variables *****/
 static registered_callback_s *g_head = NULL;
 static uint8_t g_registered_callbacks = 0;
 static volatile uint32_t g_systick = 0;
 
 
 /***** Global functions definitions *****/
+
+hub_retcode_t timers_init(void)
+{
+    return (hub_retcode_t)SysTick_Config(SystemCoreClock/1000);
+}
 
 hub_retcode_t timers_add_timer(uint32_t timeout, timer_callback callback, bool repeat)
 {
@@ -98,10 +107,7 @@ hub_retcode_t timers_stop_timer(timer_callback callback)
 
 /***** Local functions definitions *****/
 
-void timers_init(void)
-{
-    if(0 != SysTick_Config(SystemCoreClock/1000)) while(1);
-}
+
 
 void SysTick_Handler(void)
 {

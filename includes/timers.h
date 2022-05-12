@@ -9,7 +9,7 @@ typedef void (*timer_callback)(void);
 /****************************
  * @brief Configure SysTick for miliseconds. Must be callet before anything else
  * **************************/
-void timers_init(void);
+hub_retcode_t timers_init(void);
 
 /****************************
  * @brief Add timer with IRQ and user callback. Calling it again with the same callback will restart the timer
