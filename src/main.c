@@ -1,6 +1,7 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "string.h"
+#include "stdbool.h"
 #include "tools.h"
 #include "bmp280.h"
 #ifdef STM32F1
@@ -20,8 +21,10 @@ static void init_done(void);
 GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 bmp280_data_s test_data = {0};
+uint8_t a = 0, b = 0;
 void test_callback(void)
 {
+    a++;
     HAL_GPIO_TogglePin(LED_port, LED_pin);
     debug_uart_printf("Hi\n");
 }
@@ -30,6 +33,7 @@ void test_callback2(void)
 {
     HAL_GPIO_TogglePin(LED_port, LED_pin);
     debug_uart_printf("Haj\n");
+    b++;
 }
 
 int main(void)
@@ -41,11 +45,13 @@ int main(void)
     timers_init();
     init_done();
     /////////////
-    timers_add_timer(1000,test_callback);
-    timers_add_timer(3000,test_callback2);
+    timers_add_timer(1000,test_callback, true);
+    timers_add_timer(3000,test_callback2, true);
 
     while(1)
     {
+        if(a == 15) timers_stop_timer(test_callback);
+        if(b == 3) timers_stop_timer(test_callback2);
     }
 }
 
