@@ -25,19 +25,6 @@ GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 bmp280_data_s test_data = {0};
 uint8_t a = 0, b = 0;
-void test_callback(void)
-{
-    a++;
-    HAL_GPIO_TogglePin(LED_port, LED_pin);
-    debug_uart_printf("Hi\n");
-}
-
-void test_callback2(void)
-{
-    HAL_GPIO_TogglePin(LED_port, LED_pin);
-    debug_uart_printf("Haj\n");
-    b++;
-}
 
 int main(void)
 {
