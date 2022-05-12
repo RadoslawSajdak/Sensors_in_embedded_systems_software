@@ -17,7 +17,8 @@ static bool                             g_msg_timeout = false;
 static char                             g_last_msg[MAX_MSG_LEN] = {0};
 
 /***** Local Functions Definitions *****/
-hub_retcode_t api_wait_for_message(char *message);
+hub_retcode_t           wait_for_message(char *message);
+api_user_commands_t     parse_at_command(void);
 void api_msg_timeout_handler(void);
 
 
@@ -28,9 +29,20 @@ void run_api(void)
     api_uart_init(115200);
     while(1)
     {
-        while( OK != api_wait_for_message("AT+"));
-
+        while( OK != wait_for_message("AT+"));
         debug_uart_printf("GOT it! %s\n", g_last_msg);
+        switch (parse_at_command())
+        {
+        case GET_TEMPERATURE_COMMAND:
+            debug_uart_printf("Asked for temperature\n");
+            break;
+        case GET_PRESSURE_COMMAND:
+            debug_uart_printf("Asked for pressure\n");
+            break;
+        
+        default:
+            break;
+        }
 
         //HAL_Delay(500);
 
@@ -42,7 +54,7 @@ void run_api(void)
 
 /***** Local Functions *****/
 
-hub_retcode_t api_wait_for_message(char *message)
+hub_retcode_t wait_for_message(char *message)
 {
     uint16_t counter = 0U;
     char buffer[MESSAGE_BUFFER] = {0};
@@ -66,6 +78,14 @@ hub_retcode_t api_wait_for_message(char *message)
             }
     }
     return TIMEOUT_ERROR;
+}
+
+api_user_commands_t parse_at_command(void)
+{
+    if( 0 == strncmp(g_last_msg, GET_TEMPERATURE, strlen(GET_TEMPERATURE))) return GET_TEMPERATURE_COMMAND;
+    if( 0 == strncmp(g_last_msg, GET_PRESSURE, strlen(GET_PRESSURE))) return GET_PRESSURE_COMMAND;
+
+    return ARGUMENT_ERROR;
 }
 
 void api_msg_timeout_handler(void)
