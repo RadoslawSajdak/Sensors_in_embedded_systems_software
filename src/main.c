@@ -97,7 +97,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
 	GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;		// SCL, SDA
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
@@ -106,7 +106,7 @@ static void I2C_Init(void)
 {
   __HAL_RCC_I2C1_CLK_ENABLE();
   I2C_InitStruct.Instance             = I2C1;
-	I2C_InitStruct.Init.ClockSpeed      = 400000;
+	I2C_InitStruct.Init.ClockSpeed      = 100000;
 	I2C_InitStruct.Init.DutyCycle       = I2C_DUTYCYCLE_2;
 	I2C_InitStruct.Init.OwnAddress1     = 0xff;
 	I2C_InitStruct.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
