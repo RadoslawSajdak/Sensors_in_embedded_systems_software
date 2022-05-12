@@ -63,6 +63,7 @@ hub_retcode_t timers_stop_timer(timer_callback callback)
         temp = current->next_element;
         free(g_head);
         g_head = temp;
+        g_registered_callbacks--;
         return OK;
     }
     while (current->next_element != NULL)
@@ -72,6 +73,7 @@ hub_retcode_t timers_stop_timer(timer_callback callback)
             temp = current->next_element;
             current->next_element = temp->next_element;
             free(temp);
+            g_registered_callbacks--;
             return OK;
         }
         current = current->next_element;
