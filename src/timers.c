@@ -1,0 +1,74 @@
+#include "timers.h"
+#include "stdbool.h"
+#include "stdlib.h"
+
+#define MAX_TIMERS                          10
+#define MAX_SYSTICK_VALUE                   4294967295
+
+typedef struct registered_callback
+{
+    timer_callback callback;
+    uint32_t timeout;
+    uint32_t ticks_at_start;
+    struct registered_callback *next_element;
+}registered_callback_s;
+
+static registered_callback_s *g_head = NULL;
+static uint8_t g_registered_callbacks = 0;
+static volatile uint32_t g_systick = 0;
+
+
+
+
+
+/***** Global functions definitions *****/
+
+hub_retcode_t timers_add_timer(uint32_t timeout, timer_callback callback)
+{
+    if(timeout > MAX_SYSTICK_VALUE) return ARGUMENT_ERROR;
+    if (g_registered_callbacks >= MAX_TIMERS ) return ARGUMENT_ERROR;
+    registered_callback_s *current = g_head;
+
+    if(current == NULL)
+    {
+        g_head = (registered_callback_s *)malloc(sizeof(registered_callback_s));
+        g_head->callback = callback;
+        g_head->timeout = timeout;
+        g_head->ticks_at_start = g_systick;
+        g_head->next_element = NULL;
+    } else {
+
+        while(current->next_element != NULL) current = current->next_element;
+        current->next_element = (registered_callback_s *)malloc(sizeof(registered_callback_s));
+        current->next_element->callback = callback;
+        current->next_element->timeout = timeout;
+        current->next_element->ticks_at_start = g_systick; 
+        current->next_element->next_element = NULL;
+    }
+
+    g_registered_callbacks++;
+
+    return OK;
+}
+
+/***** Local functions definitions *****/
+
+void timers_init(void)
+{
+    if(0 != SysTick_Config(SystemCoreClock/1000)) while(1);
+}
+
+void SysTick_Handler(void)
+{
+    registered_callback_s *current = g_head;
+    while (current != NULL)
+    {
+        if(g_systick - current->ticks_at_start > current->timeout)
+        {
+            current->callback();
+            current->ticks_at_start = g_systick;
+        }
+        current = current->next_element;
+    }
+    g_systick++;
+}

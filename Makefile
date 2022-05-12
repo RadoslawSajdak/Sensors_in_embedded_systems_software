@@ -42,7 +42,8 @@ src/main.c \
 src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
-src/api.c 
+src/api.c \
+src/timers.c
 
 ######################################
 # ^^^^^^ SETTINGS - adding libs ^^^^^^

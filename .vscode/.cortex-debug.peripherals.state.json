@@ -1,1 +1,1 @@
-[{"node":"RCC","expanded":true,"format":0,"pinned":false},{"node":"RCC.CR.HSION","format":1},{"node":"RCC.CFGR","expanded":true,"format":0}]
+[{"node":"RCC.CR.HSION","format":1},{"node":"RCC.CFGR","expanded":true,"format":0},{"node":"TIM2","expanded":true,"format":0,"pinned":false},{"node":"TIM2.CNT","expanded":true,"format":0},{"node":"TIM2.PSC","expanded":true,"format":0}]
