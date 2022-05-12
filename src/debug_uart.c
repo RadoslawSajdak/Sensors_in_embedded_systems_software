@@ -1,12 +1,12 @@
 #include "stdarg.h"
 #include "stdio.h"
 
-//#define STM32F4
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx_hal_conf.h"
 #include "stm32f1xx_hal_usart.h"
 #endif
+
 #ifdef STM32F4
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_conf.h"
@@ -14,7 +14,6 @@
 #endif
 
 #include "debug_uart.h"
-
 
 #define UART_TIMEOUT                500 //miliseconds
 #define PRINTF_BUFFER_SIZE          512 //bytes
