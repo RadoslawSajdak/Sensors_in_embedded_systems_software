@@ -3,6 +3,14 @@
 #include "spi.h"
 #include "stdint.h"
 
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx_hal.h"
+#include "stm32f429xx.h"
+#endif
+
 /***** Defines *****/
 #define SPI_send(hspi, data)            (ret |= (HAL_SPI_Transmit(hspi, data, 1, 100)))
 #define SPI_recv(hspi, data)            (ret |= (HAL_SPI_Receive(hspi, data, 1, 100)))
