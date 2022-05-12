@@ -21,20 +21,29 @@ static void init_done(void);
 GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 bmp280_data_s test_data = {0};
+hub_retcode_t ret = OK;
+bmp280_config_s conf;
 int main(void)
 {
 
         HAL_Init();
         SystemClock_Config();
         MX_GPIO_Init();
-        if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
+
+        ret = bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin);
+        conf.osrs_pressure = BMP280_CTRL_OSRS_P08;
+        conf.osrs_temperature = BMP280_CTRL_OSRS_T08;
+        ret |= bmp280_set_config(&conf);
+        if( 0 != ret) while(1);
         for(uint8_t i = 0; i < 6; i ++)
         {
             HAL_Delay(200);
             HAL_GPIO_TogglePin(LED_port, LED_pin);
         }
         HAL_Delay(2000);
-        if( 0 != bmp280_get_data(&test_data)) while(1);
+
+        ret = bmp280_get_data(&test_data);
+        if( 0 != ret) while(1);
         for(uint8_t i = 0; i < 6; i ++)
         {
             HAL_Delay(200);
@@ -53,7 +62,7 @@ int main(void)
         while(1)
         {
             HAL_Delay(300);
-            bmp280_get_data(&test_data);
+            ret = bmp280_get_data(&test_data);
             debug_uart_printf("Temp: %d Pressure: %d\n", test_data.temperature, test_data.pressure);
         }
 }
