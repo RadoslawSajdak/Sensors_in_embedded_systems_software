@@ -74,13 +74,13 @@ hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenh
  * @brief Get the temperature reported
  * by the sensor in units specified in sts3x_dis_init()
  *
- * @param value pointer to where measurement is to be written to
+ * @param value pointer to where fixed point measurement is to be written to
  * @param configuration - measurement configuration, member of 
  *         measurement_config_t enum (PERIODIC_READ only if periodic measurements were previously enabled)
  *
  * @return 0 if success, else error number
  * **************************/
-hub_retcode_t sts3x_get_temperature(float* value, measurement_config_t configuration);
+hub_retcode_t sts3x_get_temperature(uint32_t* value, measurement_config_t configuration);
 
 /****************************
  * @brief Start the periodic temperature sampling

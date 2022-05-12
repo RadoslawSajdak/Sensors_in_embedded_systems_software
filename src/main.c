@@ -24,7 +24,7 @@ I2C_HandleTypeDef I2C_InitStruct = {0};
 bmp280_data_s test_data = {0};
 int main(void)
 {
-    float temporary_temperature = 0.0f;
+    uint32_t temporary_temperature = 0;
 
     HAL_Init();
     SystemClock_Config();
@@ -60,7 +60,7 @@ int main(void)
         bmp280_get_data(&test_data);
         debug_uart_printf("Temp1: %d Pressure1: %d\n", test_data.temperature, test_data.pressure);
         if(OK == sts3x_get_temperature(&temporary_temperature, REPEATABILITY_MEDIUM))
-            debug_uart_printf("Temp2: %F\n", temporary_temperature);
+            debug_uart_printf("Temp2: %d\n", temporary_temperature);
     }
 }
 

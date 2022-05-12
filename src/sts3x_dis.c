@@ -12,6 +12,7 @@
 #define STS3X_CRC_POLYNOMIAL 0x31;
 #define STS3X_CRC_INITIAL 0xFF;
 #define STS3X_CRC_FINAL_XOR 0x00;
+#define STS3X_FXP_MULTIPLIER 512;
 
 /***** Local variables *****/
 static I2C_HandleTypeDef* g_i2c_dev = NULL;
@@ -63,7 +64,7 @@ static uint8_t sts3x_crc(uint16_t input) {
 hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenheit)
 {
     g_i2c_dev = hi2c1;
-    float f;
+    uint32_t temp;
 
     // The device address depends on the state of ADDR pin
     if (addrPin) device_address = 0x4B << 1;
@@ -76,10 +77,10 @@ hub_retcode_t sts3x_dis_init(I2C_HandleTypeDef *hi2c1, bool addrPin, bool farenh
 
     //if (OK != (hub_retcode_t)HAL_I2C_Init(g_i2c_dev)) return INIT_ERROR;
    
-    return sts3x_get_temperature(&f, REPEATABILITY_LOW); // We return success if we CONFIRM communication
+    return sts3x_get_temperature(&temp, REPEATABILITY_LOW); // We return success if we CONFIRM communication
 }
 
-hub_retcode_t sts3x_get_temperature(float* value, measurement_config_t configuration) {
+hub_retcode_t sts3x_get_temperature(uint32_t* value, measurement_config_t configuration) {
     hub_retcode_t ret = OK;
     uint8_t retryCount = 5;
     uint8_t responseBuf[3];
@@ -99,7 +100,7 @@ hub_retcode_t sts3x_get_temperature(float* value, measurement_config_t configura
     if (ret == OK) {
         uint16_t rawValue = (responseBuf[0] << 8) + responseBuf[1];
         if (sts3x_crc(rawValue) != responseBuf[2]) return CRC_ERROR;
-        *value = ((float) (multiplier * rawValue)) / 65535 - offset;
+        *value = (uint32_t) STS3X_FXP_MULTIPLIER * ((float) (multiplier * rawValue)) / 65535 - offset;
     }
     return ret;
 }
