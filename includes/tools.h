@@ -2,7 +2,6 @@
 #define __TOOLS_H__
 
 /***** Boards *****/
-
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
 #define LED_pin GPIO_PIN_8
@@ -12,6 +11,7 @@
 #endif
 #ifdef STM32F4
 #include "stm32f4xx_hal.h"
+#include "stm32f429xx.h"
 #define LED_pin GPIO_PIN_14
 #define LED_port GPIOG
 #define SPI_CSB_Pin     GPIO_PIN_5
@@ -51,7 +51,8 @@ typedef enum {
     INIT_ERROR = 1,
     BUSY_ERROR = 2,
     TIMEOUT_ERROR = 3,
-    ARGUMENT_ERROR = 4
+    ARGUMENT_ERROR = 4,
+    NO_TIMERS_ERROR = 6,
 } hub_retcode_t;
 
 
