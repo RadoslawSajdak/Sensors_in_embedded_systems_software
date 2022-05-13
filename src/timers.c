@@ -125,12 +125,10 @@ void SysTick_Handler(void)
     g_systick++;
 }
 
-void HAL_Delay(uint32_t Delay)
+void HAL_Delay(uint32_t delay)
 {
-  uint32_t tickstart = g_systick;
-  uint32_t wait = Delay;
+    uint32_t tickstart = g_systick;
+    uint32_t wait = delay;
 
-  while((g_systick - tickstart) < wait)
-  {
-  }
+    while((g_systick - tickstart) < wait){}
 }
