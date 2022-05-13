@@ -65,14 +65,6 @@ typedef struct
 hub_retcode_t bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin);
 
 /****************************
- * @brief Get calibration data 
- * Must be called once before reading data!
- * 
- * @return 0 if succes, else error number
- * **************************/
-hub_retcode_t bmp280_get_calib(void);
-
-/****************************
  * @brief Software reset 
  * 
  * @return 0 if succes, else error number
@@ -105,15 +97,6 @@ hub_retcode_t bmp280_set_config(bmp280_config_s *conf);
 hub_retcode_t bmp280_ready(void);
 
 /****************************
- * @brief Get raw sensor value
- * 
- * @param raw pointer to data struct
- * 
- * @return 0 if succes, else error number
- * **************************/
-hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw);
-
-/****************************
  * @brief Get compensated data
  * 
  * @param data pointer to data struct
@@ -122,14 +105,5 @@ hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw);
  * **************************/
 hub_retcode_t bmp280_get_data(bmp280_data_s *data);
 
-/****************************
- * @brief Compensate raw data
- * 
- * @param raw pointer to input data struct
- * @param data pointer to output data struct
- * 
- * @return 0 if succes, else error number
- * **************************/
-hub_retcode_t bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data);
 
 #endif //__BMP280_H__

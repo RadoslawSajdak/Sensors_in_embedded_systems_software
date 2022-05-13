@@ -17,37 +17,39 @@
 #define BMP280_WRITE_M(reg, data)               (ret |= (spi_set_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data)))
 #define CHECK_ERROR_M(error)                    if(OK != (ret |= error)) return ret;
 
+/***** Local functions declatation *****/
+hub_retcode_t bmp280_get_calib(void);
+hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw);
+hub_retcode_t bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data);
+
 /***** Local variables *****/
 static SPI_HandleTypeDef        bmp_spi_dev;
 static GPIO_TypeDef             *bmp_cs_gpio = NULL;
 static uint16_t                 bmp_cs_pin = 0;
+static bmp280_config_s          config;
 bmp280_calib_digit_s            calib;
 
 
+
+
 hub_retcode_t bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
-{    
+{   
+    hub_retcode_t ret = OK;
+
     if (OK != spi_init(&bmp_spi_dev, SPI_nr)) return INIT_ERROR;
 
     spi_cs_init(CS_GPIO, CS_GPIO_Pin);
     bmp_cs_gpio = CS_GPIO;
     bmp_cs_pin = CS_GPIO_Pin;
 
-    return bmp280_get_calib();
-}
+    CHECK_ERROR_M(bmp280_get_calib());
 
+    config.mode = BMP280_CTRL_SLEEP;
+    config.osrs_pressure = BMP280_CTRL_OSRS_P08;
+    config.osrs_temperature = BMP280_CTRL_OSRS_T08;
+    CHECK_ERROR_M(bmp280_set_config(&config));
 
-hub_retcode_t bmp280_get_calib(void)
-{
-    hub_retcode_t ret = OK;
-
-    // get calibration data
-    uint8_t dig[26];
-    BMP280_READ_M(BMP280_dig_T1, dig, BMP280_dig_T_size + BMP280_dig_P_size);
-    CHECK_ERROR_M(ret);
-
-    memcpy(&calib, dig, sizeof(bmp280_calib_digit_s));
-    
-    return OK;
+    return ret;
 }
 
 hub_retcode_t bmp280_reset(void)
@@ -72,7 +74,6 @@ hub_retcode_t bmp280_get_config(bmp280_config_s *conf)
 
     conf->standby = data[1] & BMP280_CONFIG_SB_MASK;
     
-
     return ret;
 }
 
@@ -80,6 +81,7 @@ hub_retcode_t bmp280_set_config(bmp280_config_s *conf)
 {
     hub_retcode_t ret = OK;
 
+    config = *conf;
     uint8_t data = conf->osrs_temperature | conf->osrs_pressure | conf->mode;
     BMP280_WRITE_M(BMP280_REG_CTRL_MEAS, &data);
     CHECK_ERROR_M(ret);
@@ -104,19 +106,46 @@ hub_retcode_t bmp280_ready(void)
     return TIMEOUT_ERROR;
 }
 
+hub_retcode_t bmp280_get_data(bmp280_data_s *data)
+{
+    hub_retcode_t ret = OK;
+
+    bmp280_raw_data_s raw;
+    ret |= bmp280_get_raw(&raw);
+    ret |= bmp280_compensate(&raw, data);
+
+    return ret;
+}
+
+
+/***** Local functions definitions *****/
+
+hub_retcode_t bmp280_get_calib(void)
+{
+    hub_retcode_t ret = OK;
+
+    // get calibration data
+    uint8_t dig[26];
+    BMP280_READ_M(BMP280_dig_T1, dig, BMP280_dig_T_size + BMP280_dig_P_size);
+    CHECK_ERROR_M(ret);
+
+    memcpy(&calib, dig, sizeof(bmp280_calib_digit_s));
+    
+    return OK;
+}
+
 hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw)
 {
     hub_retcode_t ret = OK;
 
-    bmp280_config_s conf;
-    CHECK_ERROR_M(bmp280_get_config(&conf));
-
     // if sampling data off it is error
-    if(BMP280_CTRL_OSRS_P00 == conf.osrs_pressure && BMP280_CTRL_OSRS_T00 == conf.osrs_temperature) return NO_CONFIG_ERROR;
+    if(BMP280_CTRL_OSRS_P00 == config.osrs_pressure && BMP280_CTRL_OSRS_T00 == config.osrs_temperature) return NO_CONFIG_ERROR;
+    
+    if(BMP280_CTRL_SLEEP == config.mode) config.mode = BMP280_CTRL_FORCED;
 
-    conf.mode = BMP280_CTRL_FORCED;
-    CHECK_ERROR_M(bmp280_set_config(&conf));
-    //CHECK_ERROR_M(bmp280_ready());
+    CHECK_ERROR_M(bmp280_set_config(&config));
+    
+    CHECK_ERROR_M(bmp280_ready());
 
     uint8_t data[6];
     BMP280_READ_M(BMP280_REG_PRESS_MSB, data, 6);
@@ -128,18 +157,7 @@ hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw)
                         data[4] << 4    |
                         data[5] >> 4;
 
-    if(BMP280_CTRL_OSRS_P00 == conf.osrs_pressure) return INCORRECT_PRESSURE_ERROR;
-    return ret;
-}
-
-hub_retcode_t bmp280_get_data(bmp280_data_s *data)
-{
-    hub_retcode_t ret = OK;
-
-    bmp280_raw_data_s raw;
-    ret |= bmp280_get_raw(&raw);
-    ret |= bmp280_compensate(&raw, data);
-
+    if(BMP280_CTRL_OSRS_P00 == config.osrs_pressure) return INCORRECT_PRESSURE_ERROR;
     return ret;
 }
 

@@ -81,7 +81,10 @@ hub_retcode_t spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, 
     uint8_t buff = SPI_REG_R_M(reg);
     CSB_low(CS_GPIO, CS_GPIO_Pin);
     SPI_send(hspi1, &buff);
-    for(uint8_t i = 0; i < bytes_num && OK == ret; i++) SPI_recv(hspi1, &data[i]); 
+    for(uint8_t i = 0; i < bytes_num; i++){
+        SPI_recv(hspi1, &data[i]); 
+        if(ret != OK) break;
+    }
     CSB_high(CS_GPIO, CS_GPIO_Pin);
 
     return ret;
