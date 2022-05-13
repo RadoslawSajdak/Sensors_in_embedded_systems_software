@@ -32,4 +32,7 @@ hub_retcode_t timers_add_timer(uint32_t timeout, timer_callback callback, bool r
  * **************************/
 hub_retcode_t timers_stop_timer(timer_callback callback);
 
+
+void HAL_Delay(uint32_t Delay);
+
 #endif

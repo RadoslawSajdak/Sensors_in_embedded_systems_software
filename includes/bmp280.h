@@ -19,7 +19,6 @@
 #endif
 #ifdef STM32F4
 #include "stm32f4xx_hal.h"
-#include "stm32f429xx.h"
 #endif
 
 /***** Data types *****/
