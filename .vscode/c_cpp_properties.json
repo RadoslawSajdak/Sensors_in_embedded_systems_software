@@ -18,7 +18,7 @@
                 "${workspaceFolder}/Drivers/Config/Include"
             ],
             "defines": [
-                "STM32F4"
+                "STM32F1"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
