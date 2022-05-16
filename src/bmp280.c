@@ -1,4 +1,3 @@
-
 /***** Includes *****/
 #include "bmp280.h"
 #include "spi.h"
@@ -14,47 +13,48 @@
 #endif
 
 /***** Defines *****/
-#define BMP280_READ_M(reg, data, len)         (ret |= (spi_get_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data, len)))
-#define BMP280_WRITE_M(reg, data)             (ret |= (spi_set_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data)))
+#define BMP280_READ_M(reg, data, len)           (ret |= (spi_get_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data, len)))
+#define BMP280_WRITE_M(reg, data)               (ret |= (spi_set_register(&bmp_spi_dev, bmp_cs_gpio, bmp_cs_pin, reg, data)))
+#define CHECK_ERROR_M(error)                    if(OK != (ret |= error)) return ret;
+
+/***** Local functions declatation *****/
+hub_retcode_t bmp280_get_calib(void);
+hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw);
+hub_retcode_t bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data);
 
 /***** Local variables *****/
 static SPI_HandleTypeDef        bmp_spi_dev;
 static GPIO_TypeDef             *bmp_cs_gpio = NULL;
 static uint16_t                 bmp_cs_pin = 0;
+static bmp280_config_s          config;
 bmp280_calib_digit_s            calib;
 
 
-ErrorStatus bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
-{
-    ErrorStatus ret = SUCCESS;
-    
-    ret |= spi_init(&bmp_spi_dev, SPI_nr);
 
-    ret |= spi_cs_init(CS_GPIO, CS_GPIO_Pin);
+
+hub_retcode_t bmp280_init(SPI_TypeDef *SPI_nr, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
+{   
+    hub_retcode_t ret = OK;
+
+    if (OK != spi_init(&bmp_spi_dev, SPI_nr)) return INIT_ERROR;
+
+    spi_cs_init(CS_GPIO, CS_GPIO_Pin);
     bmp_cs_gpio = CS_GPIO;
     bmp_cs_pin = CS_GPIO_Pin;
 
-    bmp280_get_calib();
+    CHECK_ERROR_M(bmp280_get_calib());
+
+    config.mode = BMP280_CTRL_SLEEP;
+    config.osrs_pressure = BMP280_CTRL_OSRS_P08;
+    config.osrs_temperature = BMP280_CTRL_OSRS_T08;
+    CHECK_ERROR_M(bmp280_set_config(&config));
 
     return ret;
 }
 
-
-ErrorStatus bmp280_get_calib(void)
+hub_retcode_t bmp280_reset(void)
 {
-    ErrorStatus ret = SUCCESS;
-
-    // get calibration data
-    uint8_t dig[26];
-    BMP280_READ_M(BMP280_dig_T1, dig, BMP280_dig_T_size + BMP280_dig_P_size);
-    memcpy(&calib, dig, sizeof(bmp280_calib_digit_s));
-    
-    return ret;
-}
-
-ErrorStatus bmp280_reset(void)
-{
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
 
     uint8_t data = BMP280_RESET_VAL;
     BMP280_WRITE_M(BMP280_REG_RESET, &data);
@@ -62,9 +62,9 @@ ErrorStatus bmp280_reset(void)
     return ret;
 }
 
-ErrorStatus bmp280_get_config(bmp280_config_s *conf)
+hub_retcode_t bmp280_get_config(bmp280_config_s *conf)
 {
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
 
     uint8_t data[2] = {0,0};
     BMP280_READ_M(BMP280_REG_CTRL_MEAS, data, 2);
@@ -74,16 +74,17 @@ ErrorStatus bmp280_get_config(bmp280_config_s *conf)
 
     conf->standby = data[1] & BMP280_CONFIG_SB_MASK;
     
-
     return ret;
 }
 
-ErrorStatus bmp280_set_config(bmp280_config_s *conf)
+hub_retcode_t bmp280_set_config(bmp280_config_s *conf)
 {
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
 
+    config = *conf;
     uint8_t data = conf->osrs_temperature | conf->osrs_pressure | conf->mode;
     BMP280_WRITE_M(BMP280_REG_CTRL_MEAS, &data);
+    CHECK_ERROR_M(ret);
 
     data = conf->standby;
     BMP280_WRITE_M(BMP280_REG_CONFIG, &data);
@@ -91,30 +92,60 @@ ErrorStatus bmp280_set_config(bmp280_config_s *conf)
     return ret;
 }
 
-ErrorStatus bmp280_ready(void)
+hub_retcode_t bmp280_ready(void)
 {
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
 
     uint8_t data = 0xff;
     for(uint8_t i = 0; i < 100; i++){
-        if(BMP280_STATUS_DONE == data) break;
+        if(BMP280_STATUS_DONE == data || OK != ret) return ret;
         BMP280_READ_M(BMP280_REG_STATUS, &data, 1);
         HAL_Delay(200);
     }
 
+    return TIMEOUT_ERROR;
+}
+
+hub_retcode_t bmp280_get_data(bmp280_data_s *data)
+{
+    hub_retcode_t ret = OK;
+
+    bmp280_raw_data_s raw;
+    ret |= bmp280_get_raw(&raw);
+    ret |= bmp280_compensate(&raw, data);
+
     return ret;
 }
 
-ErrorStatus bmp280_get_raw(bmp280_raw_data_s *raw)
+
+/***** Local functions definitions *****/
+
+hub_retcode_t bmp280_get_calib(void)
 {
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
 
-    bmp280_config_s conf;
-    bmp280_get_config(&conf);
+    // get calibration data
+    uint8_t dig[26];
+    BMP280_READ_M(BMP280_dig_T1, dig, BMP280_dig_T_size + BMP280_dig_P_size);
+    CHECK_ERROR_M(ret);
 
-    conf.mode = BMP280_CTRL_FORCED;
-    bmp280_set_config(&conf);
-    bmp280_ready();
+    memcpy(&calib, dig, sizeof(bmp280_calib_digit_s));
+    
+    return OK;
+}
+
+hub_retcode_t bmp280_get_raw(bmp280_raw_data_s *raw)
+{
+    hub_retcode_t ret = OK;
+
+    // if sampling data off it is error
+    if(BMP280_CTRL_OSRS_P00 == config.osrs_pressure && BMP280_CTRL_OSRS_T00 == config.osrs_temperature) return NO_CONFIG_ERROR;
+    
+    if(BMP280_CTRL_SLEEP == config.mode) config.mode = BMP280_CTRL_FORCED;
+
+    CHECK_ERROR_M(bmp280_set_config(&config));
+    
+    CHECK_ERROR_M(bmp280_ready());
 
     uint8_t data[6];
     BMP280_READ_M(BMP280_REG_PRESS_MSB, data, 6);
@@ -126,25 +157,12 @@ ErrorStatus bmp280_get_raw(bmp280_raw_data_s *raw)
                         data[4] << 4    |
                         data[5] >> 4;
 
+    if(BMP280_CTRL_OSRS_P00 == config.osrs_pressure) return INCORRECT_PRESSURE_ERROR;
     return ret;
 }
 
-ErrorStatus bmp280_get_data(bmp280_data_s *data)
+hub_retcode_t bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data)
 {
-    ErrorStatus ret = SUCCESS;
-
-    bmp280_raw_data_s raw;
-    bmp280_get_raw(&raw);
-
-    bmp280_compensate(&raw, data);
-
-    return ret;
-}
-
-ErrorStatus bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data)
-{
-    ErrorStatus ret = SUCCESS;
-
     int32_t var1t, var2t, tFine, millicelsius;
     int32_t adc_T = raw->temperature;
 
@@ -162,7 +180,7 @@ ErrorStatus bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data)
     var2 = var2 + (((int64_t)calib.dig_p4)<<35);
     var1 = ((var1 * var1 * (int64_t)calib.dig_p3)>>8) + ((var1 * (int64_t)calib.dig_p2)<<12);
     var1 = (((((int64_t)1)<<47)+var1))*((int64_t)calib.dig_p1)>>33;
-    if (var1 == 0)        return 0; // avoid exception caused by division by zero
+    if (var1 == 0)        return INCORRECT_PRESSURE_ERROR; // avoid exception caused by division by zero
 
     p = 1048576-adc_P;
     p = (((p<<31)-var2)*3125)/var1;
@@ -171,5 +189,5 @@ ErrorStatus bmp280_compensate(bmp280_raw_data_s *raw, bmp280_data_s *data)
     p = ((p + var1 + var2) >> 8) + (((int64_t)calib.dig_p7)<<4);
     data->pressure = ((uint32_t)p/256);
 
-    return ret;
+    return OK;
 }

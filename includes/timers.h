@@ -32,4 +32,12 @@ hub_retcode_t timers_add_timer(uint32_t timeout, timer_callback callback, bool r
  * **************************/
 hub_retcode_t timers_stop_timer(timer_callback callback);
 
+
+/****************************
+ * @brief Redefinition of HAL Delay function. Used because of local SysTick Handler
+ * 
+ * @param delay Delay in miliseconds
+ * **************************/
+void HAL_Delay(uint32_t delay);
+
 #endif

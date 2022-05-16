@@ -1,7 +1,6 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "string.h"
-#include "stdbool.h"
 #include "tools.h"
 #include "bmp280.h"
 #include "boards.h"
@@ -23,38 +22,43 @@ static void init_done(void);
 GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 bmp280_data_s test_data = {0};
-uint8_t a = 0, b = 0;
-void test_callback(void)
-{
-    a++;
-    HAL_GPIO_TogglePin(LED_port, LED_pin);
-    debug_uart_printf("Hi\n");
-}
-
-void test_callback2(void)
-{
-    HAL_GPIO_TogglePin(LED_port, LED_pin);
-    debug_uart_printf("Haj\n");
-    b++;
-}
-
 int main(void)
 {
+        
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
     debug_uart_init(115200);
     timers_init();
-    init_done();
-    /////////////
-    timers_add_timer(1000,test_callback, true);
-    timers_add_timer(3000,test_callback2, true);
 
+    if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+
+    if( 0 != bmp280_get_data(&test_data)) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+    if(test_data.temperature == 0 || test_data.pressure == 0) while(1);
+    for(uint8_t i = 0; i < 6; i ++)
+    {
+        HAL_Delay(200);
+        HAL_GPIO_TogglePin(LED_port, LED_pin);
+    }
+    HAL_Delay(2000);
+    init_done();
     while(1)
     {
-        if(a == 15) timers_stop_timer(test_callback);
-        if(a == 10){ timers_add_timer(500, test_callback, true); a++;}
-        if(b == 3) timers_stop_timer(test_callback2);
+        HAL_Delay(300);
+        bmp280_get_data(&test_data);
+        //debug_uart_printf("Temp: %d Pressure: %d\n", test_data.temperature, test_data.pressure);
     }
 }
 
