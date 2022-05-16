@@ -1,15 +1,25 @@
 {
+    "env": {
+        "projectPath": "/home/matkozyra52/Documents/studia/sensory/projekt/Sensors_in_embedded_systems_software"
+      },
     "configurations": [
         {
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "/home/roiz/Codes/Sensors_in_embedded_systems_software/includes",
-                "/home/roiz/Codes/Sensors_in_embedded_systems_software/Drivers/STM32F1xx_HAL_Driver/Inc",
-                "/home/roiz/Codes/Sensors_in_embedded_systems_software/Drivers/Config/Include",
-                "/home/roiz/Codes/Sensors_in_embedded_systems_software/Drivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include"
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/Drivers/stm32f429/CMSIS/Include",
+                "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/stm32f429/CMSIS/Device/ST/STM32F4xx/Include",
+                "${workspaceFolder}/Drivers/Config/Include",
+                "${workspaceFolder}/Drivers/stm32f103/CMSIS/Include",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/stm32f103/CMSIS/Device/ST/STM32F1xx/Include",
+                "${workspaceFolder}/Drivers/Config/Include"
             ],
-            "defines": [],
+            "defines": [
+                "STM32F1"
+            ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
             "cppStandard": "gnu++14",

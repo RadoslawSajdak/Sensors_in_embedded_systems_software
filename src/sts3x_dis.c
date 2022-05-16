@@ -88,13 +88,14 @@ hub_retcode_t sts3x_get_temperature(uint32_t* value, measurement_config_t config
     // Check if periodic measurements were enabled if a periodic read was requested
     if (configuration == PERIODIC_READ && !periodicEnabled) return ERROR;
     if (OK != I2C_write_M((uint16_t*) &configuration)) return ERROR;
-
     // Sensor responds with NACK until the data is ready, which results in HAL_ERROR
     // (Retry count might have to be higher, maybe better with timer dependent on measurement repeatability)
     do {
         ret = I2C_read_M(responseBuf, 3);
         retryCount--;
+        HAL_Delay(100);
     } while (ret != OK && retryCount != 0);
+
 
     // If an ACK was received, 2 value and 1 CRC bytes are written to responseBuf
     if (ret == OK) {
