@@ -45,7 +45,8 @@ src/debug_uart.c \
 src/sts3x_dis.c \
 src/api.c \
 src/timers.c \
-src/boards.c
+src/boards.c \
+src/api_uart.c
 
 ######################################
 # ^^^^^^ SETTINGS - adding libs ^^^^^^

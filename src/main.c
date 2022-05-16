@@ -7,6 +7,7 @@
 #include "boards.h"
 #include "debug_uart.h"
 #include "timers.h"
+#include "api.h"
 
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
@@ -24,10 +25,8 @@ static void I2C_Init(void);
 GPIO_InitTypeDef GPIO_InitStruct = {0};
 I2C_HandleTypeDef I2C_InitStruct = {0};
 
-bmp280_data_s test_data = {0};
 int main(void)
 {
-    uint32_t temporary_temperature = 0;
 
     SystemClock_Config();
     timers_init();
@@ -38,34 +37,13 @@ int main(void)
     
     if(0 != sts3x_dis_init(&I2C_InitStruct, false, false)) while(1);
     if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
-    for(uint8_t i = 0; i < 6; i ++)
-    {
-        HAL_Delay(200);
-        HAL_GPIO_TogglePin(LED_port, LED_pin);
-    }
-    HAL_Delay(2000);
-    if( 0 != bmp280_get_data(&test_data)) while(1);
-    for(uint8_t i = 0; i < 6; i ++)
-    {
-        HAL_Delay(200);
-        HAL_GPIO_TogglePin(LED_port, LED_pin);
-    }
-    HAL_Delay(2000);
-    if(test_data.temperature == 0 || test_data.pressure == 0) while(1);
-    for(uint8_t i = 0; i < 6; i ++)
-    {
-        HAL_Delay(200);
-        HAL_GPIO_TogglePin(LED_port, LED_pin);
-    }
-    HAL_Delay(2000);
     init_done();
+    /////////////
+
+    run_api();
     while(1)
     {
-        HAL_Delay(300);
-        bmp280_get_data(&test_data);
-        debug_uart_printf("Temp1: %d Pressure1: %d\n", test_data.temperature, test_data.pressure);
-        if(OK == sts3x_get_temperature(&temporary_temperature, REPEATABILITY_MEDIUM))
-            debug_uart_printf("Temp2: %d\n", temporary_temperature);
+        ;
     }
 }
 

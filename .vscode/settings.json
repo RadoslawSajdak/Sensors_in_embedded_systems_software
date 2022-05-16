@@ -5,8 +5,10 @@
         "stdint.h": "c",
         "tools.h": "c",
         "stm32f1xx_hal_conf.h": "c",
-        "timers.h": "c"
-    },
+        "timers.h": "c",
+        "stm32f429xx.h": "c",
+        "api.h": "c"
+},
     "cortex-debug.gdbPath": "/usr/local/bin/arm-eabi-gdb",
     "cortex-debug.stutilPath": "/usr/local/bin/st-util",
     "C_Cpp.errorSquiggles": "Disabled",
