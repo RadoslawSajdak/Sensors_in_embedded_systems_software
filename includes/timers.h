@@ -38,6 +38,6 @@ hub_retcode_t timers_stop_timer(timer_callback callback);
  * 
  * @param delay Delay in miliseconds
  * **************************/
-void HAL_Delay(uint32_t delay);
+void timers_delay(uint32_t delay);
 
 #endif
