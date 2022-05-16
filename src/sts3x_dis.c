@@ -9,10 +9,10 @@
 #define I2C_write_M(data_p) ((hub_retcode_t) (HAL_I2C_Master_Transmit(g_i2c_dev, device_address, (uint8_t *)data_p, 2, HAL_MAX_DELAY)))
 
 // Values for CRC calculation
-#define STS3X_CRC_POLYNOMIAL 0x31;
-#define STS3X_CRC_INITIAL 0xFF;
-#define STS3X_CRC_FINAL_XOR 0x00;
-#define STS3X_FXP_MULTIPLIER 512;
+#define STS3X_CRC_POLYNOMIAL 0x31
+#define STS3X_CRC_INITIAL 0xFF
+#define STS3X_CRC_FINAL_XOR 0x00
+#define STS3X_FXP_MULTIPLIER 512
 
 /***** Local variables *****/
 static I2C_HandleTypeDef* g_i2c_dev = NULL;
