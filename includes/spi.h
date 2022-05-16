@@ -3,12 +3,15 @@
 
 /***** Includes *****/
 #include "tools.h"
+
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
 #endif
 #ifdef STM32F4
 #include "stm32f4xx_hal.h"
+#include "stm32f429xx.h"
 #endif
+
 
 /***** Defines *****/
 #define SPI_REG_R_M(reg)  ((reg) | 0x80)
@@ -23,7 +26,7 @@
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus spi_init(SPI_HandleTypeDef *hspi1, SPI_TypeDef *SPI_nr);
+hub_retcode_t spi_init(SPI_HandleTypeDef *hspi1, SPI_TypeDef *SPI_nr);
 
 /****************************
  * @brief Initializing spi cs pin. 
@@ -32,9 +35,8 @@ ErrorStatus spi_init(SPI_HandleTypeDef *hspi1, SPI_TypeDef *SPI_nr);
  * @param CS_GPIO pointer to GPIO
  * @param CS_GPIO_Pin pin number
  * 
- * @return 0 if succes, else error number
  * **************************/
-ErrorStatus spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin);
+void spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin);
 
 /****************************
  * @brief Write single byte to register
@@ -47,7 +49,7 @@ ErrorStatus spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin);
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data);
+hub_retcode_t spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data);
 
 /****************************
  * @brief Read multiple bytes from device
@@ -61,7 +63,7 @@ ErrorStatus spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, ui
  * 
  * @return 0 if succes, else error number
  * **************************/
-ErrorStatus spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data, uint8_t bytes_num);
+hub_retcode_t spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data, uint8_t bytes_num);
 
 
 #endif //__SPI_H__

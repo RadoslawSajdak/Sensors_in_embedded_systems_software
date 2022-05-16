@@ -3,6 +3,14 @@
 #include "spi.h"
 #include "stdint.h"
 
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx_hal.h"
+#include "stm32f429xx.h"
+#endif
+
 /***** Defines *****/
 #define SPI_send(hspi, data)            (ret |= (HAL_SPI_Transmit(hspi, data, 1, 100)))
 #define SPI_recv(hspi, data)            (ret |= (HAL_SPI_Receive(hspi, data, 1, 100)))
@@ -14,10 +22,8 @@
 
 /***** Global functions definitions *****/
 
-ErrorStatus spi_init(SPI_HandleTypeDef *hspi1, SPI_TypeDef *SPI_nr)
+hub_retcode_t spi_init(SPI_HandleTypeDef *hspi1, SPI_TypeDef *SPI_nr)
 {
-    ErrorStatus ret = SUCCESS;
-
     /* SPI1 parameter configuration*/
     hspi1->Instance = SPI_nr;
     hspi1->Init.Mode = SPI_MODE_MASTER;
@@ -31,14 +37,13 @@ ErrorStatus spi_init(SPI_HandleTypeDef *hspi1, SPI_TypeDef *SPI_nr)
     hspi1->Init.TIMode = SPI_TIMODE_DISABLE;
     hspi1->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
     hspi1->Init.CRCPolynomial = 10;
-    if (HAL_SPI_Init(hspi1) != HAL_OK) return ERROR;
+    if (HAL_SPI_Init(hspi1) != HAL_OK) return INIT_ERROR;
 
-    return ret;
+    return OK;
 }
 
-ErrorStatus spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
+void spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
 {
-    ErrorStatus ret = SUCCESS;
     /* CSB */
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -52,13 +57,12 @@ ErrorStatus spi_cs_init(GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(CS_GPIO, &GPIO_InitStruct);
 
-    return ret;
 }
 
 
-ErrorStatus spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data)
+hub_retcode_t spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data)
 {
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
     
     uint8_t buff = SPI_REG_W_M(reg);
     CSB_low(CS_GPIO, CS_GPIO_Pin);
@@ -70,14 +74,17 @@ ErrorStatus spi_set_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, ui
 }
 
 
-ErrorStatus spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data, uint8_t bytes_num)
+hub_retcode_t spi_get_register(SPI_HandleTypeDef *hspi1, GPIO_TypeDef* CS_GPIO, uint16_t CS_GPIO_Pin, uint8_t reg, uint8_t *data, uint8_t bytes_num)
 {
-    ErrorStatus ret = SUCCESS;
+    hub_retcode_t ret = OK;
 
-    uint8_t buff = READ_REG(reg);
+    uint8_t buff = SPI_REG_R_M(reg);
     CSB_low(CS_GPIO, CS_GPIO_Pin);
     SPI_send(hspi1, &buff);
-    for(size_t k = 0; k < bytes_num; k++) SPI_recv(hspi1, &data[k]); 
+    for(uint8_t i = 0; i < bytes_num; i++){
+        SPI_recv(hspi1, &data[i]); 
+        if(ret != OK) break;
+    }
     CSB_high(CS_GPIO, CS_GPIO_Pin);
 
     return ret;
