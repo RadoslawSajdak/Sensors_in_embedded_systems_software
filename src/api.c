@@ -1,28 +1,70 @@
 /***** Includes *****/
 #include "api.h"
+#include "stdio.h"
 #include "debug_uart.h"
 #include "api_uart.h"
 #include "tools.h"
 #include "string.h"
 #include "timers.h"
+#include "bmp280.h"
+#include "sts3x_dis.h"
 
 
 /***** Defines *****/
 #define MAX_MSG_LEN                     100
+#define MAX_COMMAND_LEN                 20
+#define MAX_COMMAND_NUMBER              20
 #define MESSAGE_BUFFER                  10 * MAX_MSG_LEN
 #define WAIT_FOR_MSG_TIMEOUT_MS         1000
+#define MAX_COMMAND_CHOICE              4
+
+typedef void (*api_callback)(void);
+
+typedef enum{
+    DEFAULT_COMMANDS = 0,
+    BMP_COMMANDS = 1,
+    STS_COMMANDS = 2,
+    MQ_COMMANDS = 3
+}sensor_choice_t;
+
+typedef struct
+{
+    char command[20];
+    api_callback callback;
+}command_handlers_s;
+
+/***** Local Functions Definitions *****/
+hub_retcode_t           api_send_response(const uint32_t value);
+hub_retcode_t           wait_for_message(char *message);
+api_user_commands_t     parse_at_command(void);
+void                    api_msg_timeout_handler(void);
+
+/**** Rapers definitions *****/
+void api_menu_set_bmp(void);
+void api_menu_set_sts(void);
+void api_menu_set_mq(void);
+void api_menu_set_default(void);
+void api_bmp_get_data(void);
+void api_sts_get_temp(void);
+
 
 /***** Local Variables *****/
 static bool                             g_msg_timeout = false;
 static char                             g_last_msg[MAX_MSG_LEN] = {0};
-
-/***** Local Functions Definitions *****/
-hub_retcode_t           wait_for_message(char *message);
-api_user_commands_t     parse_at_command(void);
-void api_msg_timeout_handler(void);
-
+static bmp280_data_s                    g_bmp_data = {0};
+static uint32_t                         g_sts32_val = 0;
+static sensor_choice_t                  g_chosen_sensor = DEFAULT_COMMANDS;
+static const command_handlers_s         __menu_command_list[MAX_COMMAND_NUMBER] = { {.command = "BMP", .callback = api_menu_set_bmp},
+                                                                                    {.command = "STS", .callback = api_menu_set_sts},
+                                                                                    {.command = "MQ", .callback = api_menu_set_mq},
+                                                                                    {.command = "BACK", .callback = api_menu_set_default}};
+static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {{.command = "GETDATA", .callback = api_bmp_get_data}};
+static const command_handlers_s         __sts_command_list[MAX_COMMAND_NUMBER] = {{.command = "GETDATA", .callback = api_sts_get_temp}};
+static const command_handlers_s         __mq_command_list[MAX_COMMAND_NUMBER];
+static const command_handlers_s         *__sensor_choice[MAX_COMMAND_CHOICE] = {__menu_command_list, __bmp_command_list, __sts_command_list, __mq_command_list};
 
 /***** Public Functions *****/
+
 void run_api(void)
 {
     //uint8_t message [100] = {0};
@@ -30,22 +72,11 @@ void run_api(void)
     while(1)
     {
         while( OK != wait_for_message("AT+"));
-        debug_uart_printf("GOT it! %s\n", g_last_msg);
-        switch (parse_at_command())
+        if(g_last_msg != NULL)
         {
-        case GET_TEMPERATURE_COMMAND:
-            debug_uart_printf("Asked for temperature\n");
-            break;
-        case GET_PRESSURE_COMMAND:
-            debug_uart_printf("Asked for pressure\n");
-            break;
-        
-        default:
-            break;
+            debug_uart_printf("GOT it! %s\n", g_last_msg);
+            parse_at_command();
         }
-
-        //HAL_Delay(500);
-
     }
 }
 
@@ -53,37 +84,56 @@ void run_api(void)
 
 
 /***** Local Functions *****/
+hub_retcode_t api_send_response(const uint32_t value)
+{
+    char msg[20] = {0};
+    sprintf(msg, "%lu", value);
+    return api_uart_tx((uint8_t *)msg, strlen(msg));
+}
 
 hub_retcode_t wait_for_message(char *message)
 {
     uint16_t counter = 0U;
     char buffer[MESSAGE_BUFFER] = {0};
-    g_msg_timeout = false;
-    timers_add_timer(WAIT_FOR_MSG_TIMEOUT_MS, api_msg_timeout_handler, false);
-    while (!g_msg_timeout)
+    while (1)
     {
         if(counter == MESSAGE_BUFFER) for(; counter > 0; counter--) buffer[counter] = 0;
-        if( OK == api_uart_rx((uint8_t *)buffer + counter, 1))
+        if( TIMEOUT_ERROR != api_uart_rx((uint8_t *)buffer + counter, 1))
             if(buffer[counter++] == '\r')
             {
+                timers_add_timer(WAIT_FOR_MSG_TIMEOUT_MS, api_msg_timeout_handler, false);
                 if( 0 == strncmp(buffer, message, strlen(message)))
                 {
-                    strncpy(g_last_msg, buffer + 3, strlen(buffer));   
+                    strncpy(g_last_msg, buffer + 3, strlen(buffer));
+                    api_uart_tx((uint8_t *)"OK", 2);   
                     return OK;
                 }
                 else{
+                    api_uart_tx((uint8_t *)"ERROR", strlen("ERROR"));
                     memset(buffer, 0, counter);
+                    memset(g_last_msg, 0, sizeof(g_last_msg));
                     counter = 0;
                 }
             }
     }
+    memset(g_last_msg, 0, sizeof(g_last_msg));
     return TIMEOUT_ERROR;
 }
 
 api_user_commands_t parse_at_command(void)
 {
-    if( 0 == strncmp(g_last_msg, GET_TEMPERATURE, strlen(GET_TEMPERATURE))) return GET_TEMPERATURE_COMMAND;
-    if( 0 == strncmp(g_last_msg, GET_PRESSURE, strlen(GET_PRESSURE))) return GET_PRESSURE_COMMAND;
+    const command_handlers_s *current_array = __sensor_choice[g_chosen_sensor];
+
+    for(size_t i = 0; i < MAX_COMMAND_NUMBER && strlen(current_array[i].command) > 0; i++)
+    {
+        if(0 == strncmp(g_last_msg, current_array[i].command, strlen(current_array[i].command)))
+        {
+            debug_uart_printf("Got callback at pos %d for msg %s command is %s", i, g_last_msg, current_array[i].command);
+            current_array[i].callback();
+            return OK;
+        }
+    }
+    
 
     return ARGUMENT_ERROR;
 }
@@ -91,4 +141,36 @@ api_user_commands_t parse_at_command(void)
 void api_msg_timeout_handler(void)
 {
     g_msg_timeout = true;
+}
+
+
+/***** Rapers *****/
+void api_menu_set_bmp(void)
+{
+    g_chosen_sensor = BMP_COMMANDS;
+}
+void api_menu_set_sts(void)
+{
+    g_chosen_sensor = STS_COMMANDS;
+}
+void api_menu_set_mq(void)
+{
+    g_chosen_sensor = MQ_COMMANDS;
+}
+void api_menu_set_default(void)
+{
+    g_chosen_sensor = DEFAULT_COMMANDS;
+}
+
+void api_bmp_get_data(void)
+{
+    memset(&g_bmp_data, 0, sizeof(bmp280_data_s));
+    bmp280_get_data(&g_bmp_data);
+    api_send_response(g_bmp_data.temperature);
+}
+
+void api_sts_get_temp(void)
+{
+    g_sts32_val = 0U;
+    sts3x_get_temperature(&g_sts32_val, REPEATABILITY_HIGH);
 }
