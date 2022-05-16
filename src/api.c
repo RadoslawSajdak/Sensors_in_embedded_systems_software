@@ -37,7 +37,7 @@ typedef struct
 hub_retcode_t           api_send_response(const uint32_t value);
 hub_retcode_t           wait_for_message(char *message);
 hub_retcode_t           parse_at_command(void);
-void                    api_msg_timeout_handler(void);
+static void             api_msg_timeout_handler(void);
 
 /**** Rapers definitions *****/
 static void api_menu_set_bmp(void);
