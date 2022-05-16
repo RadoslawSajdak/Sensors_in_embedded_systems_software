@@ -36,16 +36,16 @@ typedef struct
 /***** Local Functions Definitions *****/
 hub_retcode_t           api_send_response(const uint32_t value);
 hub_retcode_t           wait_for_message(char *message);
-api_user_commands_t     parse_at_command(void);
+hub_retcode_t           parse_at_command(void);
 void                    api_msg_timeout_handler(void);
 
 /**** Rapers definitions *****/
-void api_menu_set_bmp(void);
-void api_menu_set_sts(void);
-void api_menu_set_mq(void);
-void api_menu_set_default(void);
-void api_bmp_get_data(void);
-void api_sts_get_temp(void);
+static void api_menu_set_bmp(void);
+static void api_menu_set_sts(void);
+static void api_menu_set_mq(void);
+static void api_menu_set_default(void);
+static void api_bmp_get_data(void);
+static void api_sts_get_temp(void);
 
 
 /***** Local Variables *****/
@@ -69,7 +69,6 @@ static const command_handlers_s         *__sensor_choice[MAX_COMMAND_CHOICE] = {
 
 void run_api(void)
 {
-    //uint8_t message [100] = {0};
     api_uart_init(115200);
     while(1)
     {
@@ -121,7 +120,7 @@ hub_retcode_t wait_for_message(char *message)
     return TIMEOUT_ERROR;
 }
 
-api_user_commands_t parse_at_command(void)
+hub_retcode_t parse_at_command(void)
 {
     const command_handlers_s *current_array = __sensor_choice[g_chosen_sensor];
 
@@ -139,38 +138,38 @@ api_user_commands_t parse_at_command(void)
     return ARGUMENT_ERROR;
 }
 
-void api_msg_timeout_handler(void)
+static void api_msg_timeout_handler(void)
 {
     g_msg_timeout = true;
 }
 
 
 /***** Rapers *****/
-void api_menu_set_bmp(void)
+static void api_menu_set_bmp(void)
 {
     g_chosen_sensor = BMP_COMMANDS;
 }
-void api_menu_set_sts(void)
+static void api_menu_set_sts(void)
 {
     g_chosen_sensor = STS_COMMANDS;
 }
-void api_menu_set_mq(void)
+static void api_menu_set_mq(void)
 {
     g_chosen_sensor = MQ_COMMANDS;
 }
-void api_menu_set_default(void)
+static void api_menu_set_default(void)
 {
     g_chosen_sensor = DEFAULT_COMMANDS;
 }
 
-void api_bmp_get_data(void)
+static void api_bmp_get_data(void)
 {
     memset(&g_bmp_data, 0, sizeof(bmp280_data_s));
     bmp280_get_data(&g_bmp_data);
     api_send_response(g_bmp_data.temperature);
 }
 
-void api_sts_get_temp(void)
+static void api_sts_get_temp(void)
 {
     g_sts32_val = 0U;
     sts3x_get_temperature(&g_sts32_val, REPEATABILITY_HIGH);
