@@ -18,7 +18,7 @@ hub_retcode_t api_uart_init(uint32_t baudrate)
     HAL_GPIO_Init(API_UART_PORT, &GPIO_InitStruct);
 
     GPIO_InitStruct.Pin = API_UART_RX_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_INPUT;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     HAL_GPIO_Init(API_UART_PORT, &GPIO_InitStruct);
 
     /* Initialize UART */

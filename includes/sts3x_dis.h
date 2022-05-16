@@ -13,7 +13,13 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "tools.h"
-#include "stm32f1xx.h"
+
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx.h"
+#endif
 
 // Enum for heater configuration commands
 typedef enum {

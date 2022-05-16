@@ -1,8 +1,13 @@
 #include "sts3x_dis.h"
 #include "stdint.h"
 #include "stdbool.h"
-#include "stm32f1xx.h"
 #include "tools.h"
+#ifdef STM32F1
+#include "stm32f1xx_hal.h"
+#endif
+#ifdef STM32F4
+#include "stm32f4xx.h"
+#endif
 
 /***** Defines *****/
 #define I2C_read_M(data_p, len)  ((hub_retcode_t) (HAL_I2C_Master_Receive(g_i2c_dev, device_address, (uint8_t *)data_p, len, HAL_MAX_DELAY)))
