@@ -58,8 +58,10 @@ static const command_handlers_s         __menu_command_list[MAX_COMMAND_NUMBER] 
                                                                                     {.command = "STS", .callback = api_menu_set_sts},
                                                                                     {.command = "MQ", .callback = api_menu_set_mq},
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};
-static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {{.command = "GETDATA", .callback = api_bmp_get_data}};
-static const command_handlers_s         __sts_command_list[MAX_COMMAND_NUMBER] = {{.command = "GETDATA", .callback = api_sts_get_temp}};
+static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_bmp_get_data},
+                                                                                    {.command = "BACK", .callback = api_menu_set_default}};
+static const command_handlers_s         __sts_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_sts_get_temp},
+                                                                                    {.command = "BACK", .callback = api_menu_set_default}};
 static const command_handlers_s         __mq_command_list[MAX_COMMAND_NUMBER];
 static const command_handlers_s         *__sensor_choice[MAX_COMMAND_CHOICE] = {__menu_command_list, __bmp_command_list, __sts_command_list, __mq_command_list};
 
@@ -74,7 +76,7 @@ void run_api(void)
         while( OK != wait_for_message("AT+"));
         if(g_last_msg != NULL)
         {
-            debug_uart_printf("GOT it! %s\n", g_last_msg);
+            debug_uart_printf("GOT a message! %s\n", g_last_msg);
             parse_at_command();
         }
     }
@@ -104,12 +106,11 @@ hub_retcode_t wait_for_message(char *message)
                 timers_add_timer(WAIT_FOR_MSG_TIMEOUT_MS, api_msg_timeout_handler, false);
                 if( 0 == strncmp(buffer, message, strlen(message)))
                 {
-                    strncpy(g_last_msg, buffer + 3, strlen(buffer));
-                    api_uart_tx((uint8_t *)"OK", 2);   
+                    strncpy(g_last_msg, buffer + 3, strlen(buffer));  
                     return OK;
                 }
                 else{
-                    api_uart_tx((uint8_t *)"ERROR", strlen("ERROR"));
+                    api_uart_tx((uint8_t *)"ERROR\r", 6);
                     memset(buffer, 0, counter);
                     memset(g_last_msg, 0, sizeof(g_last_msg));
                     counter = 0;
@@ -128,12 +129,12 @@ api_user_commands_t parse_at_command(void)
     {
         if(0 == strncmp(g_last_msg, current_array[i].command, strlen(current_array[i].command)))
         {
-            debug_uart_printf("Got callback at pos %d for msg %s command is %s", i, g_last_msg, current_array[i].command);
+            api_uart_tx((uint8_t *)"OK\r", 3); 
             current_array[i].callback();
             return OK;
         }
     }
-    
+    api_uart_tx((uint8_t *)"UNKNOWN\r", 8); 
 
     return ARGUMENT_ERROR;
 }
