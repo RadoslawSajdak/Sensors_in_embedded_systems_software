@@ -111,6 +111,7 @@ hub_retcode_t timers_stop_timer(timer_callback callback)
 
 void SysTick_Handler(void)
 {
+    HAL_IncTick();
     registered_callback_s *current = g_head;
     while (current != NULL)
     {
@@ -123,4 +124,13 @@ void SysTick_Handler(void)
         current = current->next_element;
     }
     g_systick++;
+}
+
+
+void timers_delay(uint32_t delay)
+{
+    uint32_t tickstart = g_systick;
+    uint32_t wait = delay;
+
+    while((g_systick - tickstart) < wait){}
 }

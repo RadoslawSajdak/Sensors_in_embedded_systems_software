@@ -42,6 +42,7 @@ src/main.c \
 src/spi.c \
 src/bmp280.c \
 src/debug_uart.c \
+src/sts3x_dis.c \
 src/api.c \
 src/timers.c \
 src/boards.c \
@@ -68,6 +69,7 @@ Drivers/Config/Src/stm32f1xx_it.c \
 Drivers/Config/Src/stm32f1xx_hal_msp.c \
 Drivers/Config/Src/system_stm32f1xx.c  \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c \
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \

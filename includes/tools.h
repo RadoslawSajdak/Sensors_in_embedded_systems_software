@@ -52,8 +52,10 @@ typedef enum {
     BUSY_ERROR = 2,
     TIMEOUT_ERROR = 3,
     ARGUMENT_ERROR = 4,
+    CRC_ERROR = 5,
     NO_TIMERS_ERROR = 6,
+    INCORRECT_PRESSURE_ERROR = 7,
+    NO_CONFIG_ERROR = 8,
 } hub_retcode_t;
-
 
 #endif
