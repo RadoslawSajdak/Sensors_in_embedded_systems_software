@@ -45,6 +45,8 @@
 #define API_UART_TX_PIN             GPIO_PIN_9
 #define API_UART_RX_PIN             GPIO_PIN_10
 
+#define MQ2_CHANNEL                 ADC_CHANNEL_0
+#define MQ2_INSTANCE                ADC1
 
 typedef enum {
     OK = 0,
