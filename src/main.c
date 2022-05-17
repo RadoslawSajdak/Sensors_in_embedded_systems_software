@@ -8,6 +8,7 @@
 #include "debug_uart.h"
 #include "timers.h"
 #include "api.h"
+#include "adc.h"
 
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
@@ -34,7 +35,19 @@ int main(void)
     MX_GPIO_Init();
     I2C_Init();
     debug_uart_init(115200);
-    
+    if(OK != adc_init()) while(1);
+    uint32_t adc_data = adc_get_data();
+    char f_as_c[20] = {0};
+    debug_uart_printf("ADC: %ld\n", adc_data);
+
+    while(1)
+    {
+        adc_data = adc_get_data();
+        memset(f_as_c, 0, 20);
+        sprintf(f_as_c, "ADC: %ld (%ldV)\n", adc_data, (uint32_t)(adc_data * 3.3f / 4096.f)*1000);
+        debug_uart_printf(f_as_c);
+        HAL_Delay(200);
+    }
     if(0 != sts3x_dis_init(&I2C_InitStruct, false, false)) while(1);
     if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
     init_done();
