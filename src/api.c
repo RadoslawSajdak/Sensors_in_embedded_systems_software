@@ -46,6 +46,12 @@ static void api_menu_set_mq(void);
 static void api_menu_set_default(void);
 static void api_bmp_get_data(void);
 static void api_sts_get_temp(void);
+static void api_sts_set_repeatability_low(void);
+static void api_sts_set_repeatability_medium(void);
+static void api_sts_set_repeatability_high(void);
+static void api_sts_set_heater_on(void);
+static void api_sts_set_heater_off(void);
+static void api_sts_soft_reset(void);
 
 
 /***** Local Variables *****/
@@ -53,6 +59,7 @@ static bool                             g_msg_timeout = false;
 static char                             g_last_msg[MAX_MSG_LEN] = {0};
 static bmp280_data_s                    g_bmp_data = {0};
 static uint32_t                         g_sts32_val = 0;
+static measurement_config_t             g_sts32_config = REPEATABILITY_LOW;
 static sensor_choice_t                  g_chosen_sensor = DEFAULT_COMMANDS;
 static const command_handlers_s         __menu_command_list[MAX_COMMAND_NUMBER] = { {.command = "BMP", .callback = api_menu_set_bmp},
                                                                                     {.command = "STS", .callback = api_menu_set_sts},
@@ -61,6 +68,12 @@ static const command_handlers_s         __menu_command_list[MAX_COMMAND_NUMBER] 
 static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_bmp_get_data},
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};
 static const command_handlers_s         __sts_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_sts_get_temp},
+                                                                                    {.command = "SETREPL", .callback = api_sts_set_repeatability_low},
+                                                                                    {.command = "SETREPM", .callback = api_sts_set_repeatability_medium},
+                                                                                    {.command = "SETREPH", .callback = api_sts_set_repeatability_high},
+                                                                                    {.command = "SETHEATON", .callback = api_sts_set_heater_on},
+                                                                                    {.command = "SETHEATOFF", .callback = api_sts_set_heater_off},
+                                                                                    {.command = "SRESET", .callback = api_sts_soft_reset},
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};
 static const command_handlers_s         __mq_command_list[MAX_COMMAND_NUMBER];
 static const command_handlers_s         *__sensor_choice[MAX_COMMAND_CHOICE] = {__menu_command_list, __bmp_command_list, __sts_command_list, __mq_command_list};
@@ -172,5 +185,36 @@ static void api_bmp_get_data(void)
 static void api_sts_get_temp(void)
 {
     g_sts32_val = 0U;
-    sts3x_get_temperature(&g_sts32_val, REPEATABILITY_HIGH);
+    sts3x_get_temperature(&g_sts32_val, g_sts32_config);
+    api_send_response(g_sts32_val);
+}
+
+static void api_sts_set_repeatability_low(void)
+{
+    g_sts32_config = REPEATABILITY_LOW;
+}
+
+static void api_sts_set_repeatability_medium(void)
+{
+    g_sts32_config = REPEATABILITY_MEDIUM;
+}
+
+static void api_sts_set_repeatability_high(void)
+{
+    g_sts32_config = REPEATABILITY_HIGH;    
+}
+
+static void api_sts_set_heater_on(void)
+{
+    sts3x_set_heater_status(STS3X_HEATER_ENABLE);
+}
+
+static void api_sts_set_heater_off(void)
+{
+    sts3x_set_heater_status(STS3X_HEATER_DISABLE);
+}
+
+static void api_sts_soft_reset(void)
+{
+    sts3x_soft_reset();
 }
