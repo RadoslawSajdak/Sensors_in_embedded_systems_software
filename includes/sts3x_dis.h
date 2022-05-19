@@ -21,6 +21,10 @@
 #include "stm32f4xx.h"
 #endif
 
+#define STS_REPEATABILITY_LOW_WAITTIME 5
+#define STS_REPEATABILITY_MEDIUM_WAITTIME 7
+#define STS_REPEATABILITY_HIGH_WAITTIME 16
+
 // Enum for heater configuration commands
 typedef enum {
   STS3X_HEATER_ENABLE = 0x6D30,
@@ -53,6 +57,7 @@ typedef enum {
   REP_MEDIUM_10MPS = 0x2127,
   REP_HIGH_10MPS = 0x3727
 } periodic_measurement_config_t;
+
 
 // Any non-zero state of the member should be treated as HIGH.
 typedef struct {
