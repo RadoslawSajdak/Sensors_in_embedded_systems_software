@@ -8,12 +8,6 @@
 #endif
 
 
-/***** Defines *****/
-
-/***** Local functions declatation *****/
-
-
-
 
 /***** Global functions definitions *****/
 hub_retcode_t adc_init(ADC_HandleTypeDef *hadc, ADC_TypeDef *instance, uint32_t channel){
