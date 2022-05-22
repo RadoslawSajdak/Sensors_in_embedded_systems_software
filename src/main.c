@@ -33,11 +33,11 @@ int main(void)
     HAL_Init();
     MX_GPIO_Init();
     if(OK != mq2_init(MQ2_INSTANCE, MQ2_CHANNEL)) while(1);
-    mq2_track_data(200, 2000, alarm);
+    mq2_track_data(200, LPG_MQ2, 2000, alarm);
     uint16_t adc_data;
     while(1)
     {
-        adc_data = mq2_get_sample();
+        adc_data = mq2_get_ppm(LPG_MQ2);
         printf("%d", adc_data);
         HAL_Delay(2000);
     }

@@ -58,6 +58,7 @@ typedef enum {
     NO_TIMERS_ERROR = 6,
     INCORRECT_PRESSURE_ERROR = 7,
     NO_CONFIG_ERROR = 8,
+    CALIBRATION_ERROR = 9,
 } hub_retcode_t;
 
 #endif
