@@ -89,6 +89,19 @@ hub_retcode_t sts3x_get_temperature(uint32_t* value, measurement_config_t config
     hub_retcode_t ret = OK;
     uint8_t retryCount = 5;
     uint8_t responseBuf[3];
+    uint8_t maxWaitTime = STS_REPEATABILITY_HIGH_WAITTIME;
+
+    switch (configuration)
+    {
+    case REPEATABILITY_LOW:
+        maxWaitTime = STS_REPEATABILITY_LOW_WAITTIME;
+        break;
+    case REPEATABILITY_MEDIUM:
+        maxWaitTime = STS_REPEATABILITY_MEDIUM_WAITTIME;
+        break;
+    default:
+        break;
+    }
 
     // Check if periodic measurements were enabled if a periodic read was requested
     if (configuration == PERIODIC_READ && !periodicEnabled) return ERROR;
@@ -96,9 +109,9 @@ hub_retcode_t sts3x_get_temperature(uint32_t* value, measurement_config_t config
     // Sensor responds with NACK until the data is ready, which results in HAL_ERROR
     // (Retry count might have to be higher, maybe better with timer dependent on measurement repeatability)
     do {
+        HAL_Delay(maxWaitTime);
         ret = I2C_read_M(responseBuf, 3);
         retryCount--;
-        HAL_Delay(100);
     } while (ret != OK && retryCount != 0);
 
 
