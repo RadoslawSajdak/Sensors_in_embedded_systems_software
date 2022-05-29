@@ -40,17 +40,84 @@ Wartym zaznaczenia jest tutaj fakt nie wyprowadzenia pinów SWDIO oraz SWCLK. Po
     \caption{Schemat połączeń konwertera UART-USB oraz mikroprocesora}
     \label{img:main_sch}
 \end{figure}
+
 \subsection{Layout}
-\textbf{Pokazać warstwy elektryczne. Zdjęcia wydrukowanych płytek. Jakie problemy się pojawiły (1 raz z Kicadem, więc np. okazało się, że domyślnie ścieżki ma całkiem szerokie. Podobnie viasy). Brak miejsca na wyprowadzenia SWD}
+W kolejnym kroku, wykonany został layout płytki. Obrazek \ref{img:front_layout} przedstawia frontową warstwę elektryczną płytki oraz nadruki na niej. Z założenia, jest to warstwa w większości wypełniona masą (GND). Niestety, ze względu na brak miejsca na warstwie tylnej, masa układu jest znacząco pocięta, choć pozostaje jednolita. W przypadku linii 5V, zasilającej czujnik MQ2, zasosowano znacznie szersze ścieżki o szerokości 30mils. Pozostałe, mają szerokość 12 oraz 7,87mils. Druga z tych wartości, jest wartością minimalną, domyślną dla programu KiCad. Mimo ręcznego ustawiania mniejszej szerokości, zgodnej z zaleceniami JLCPCB\cite{jlcpcb_specification}, program automatycznie zmieniał szerokość ścieżki na większą. Podobnie było w przypadku przelotek. Niestety, zorientowano się o tym pod koniec tworzenia płytki, a mogłoby to pomóc oszczędzić miejsce. Szczególnie istotne, jest to dla warstwy sygnałowej, przedstawionej na rysunku \ref{img:back_layout}. Ze względu na czytelność, rysunek przedstawia jedynie połączenia elektryczne, bez nadruku. Jako elementy pasywne, wykorzystano te w obudowach 0806 oraz pojedyncze elementy 0402. Również w przypadku tej warstwy, znacząco pogrubiono ścieżki doprowadzające zasilanie. Ma to na celu poprawę przewodności ścieżek, która zeleży od ich szerokości. Jak można zauważyć, na płytce jest bardzo gęsto, a część elementów znajduje się na granicy spełnienia warunków DRC (np. odstępów między padami). Ponieważ jednak był to pierwszy projekt płytki autora, popełniono tutaj kilka błędów. Najważniejszym z nich, jest użycie komponentów 0806. Zdecydowano się na nie, ponieważ wszystko lutowane było ręcznie (z użyciem szablonu do pasty, jednak w trakcie wykonywania projektu, większość układów była wielokrotnie ręcznie przelutowywana). Niestety, zajmują one bardzo dużo miejsca na płytce, a obudowy 0603 również dają się łatwo lutować ręcznie. Dobrą zmianą, byłaby również bardziej zwarta sekcja zasilania. Dodatkowe miejsce, mogłoby pozwolić wygodniej umiejscowić komponenty. Również szerokość ścieżek sygnałowych, mniejsza o 1,87mils (0,0254mm) mogłaby pozwolić zaoszczędzić nieco miejsca i lepiej poprowadzić ścieżki.
+\newline
+Po wygenerowaniu plików, płytkę oraz szablon, zamówiono w serwisie JLCPCB. Jednocześnie, części zamówiono w sklepie Mouser. Obrazek \ref{img:pcb_photo} przedstawia gotową, wykonaną płytkę przed przylutowaniem elementów. Natomiast obrazek \ref{img:pcb_rdy_photo} przedstawia zlutowaną, gotową płytkę przed wykonaniem niezbędnych przeróbek, omówionych w następnym podrozdziale. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/pcb_front.png}
+    \caption{Frontowa warstwa elektryczna płytki}
+    \label{img:front_layout}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/pcb_back.png}
+    \caption{Tylna warstwa sygnałowa płytki}
+    \label{img:back_layout}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/pcb_photo.png}
+    \caption{Zdjęcie wykonanej płytki przed lutowaniem elementów}
+    \label{img:pcb_photo}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/pcb_rdy_photo.png}
+    \caption{Zdjęcie wykonanej płytki po lutowaniu elementów}
+    \label{img:pcb_rdy_photo}
+\end{figure}
 
 \subsection{Popełnione błędy oraz wykonane przeróbki}
 \label{sub:mistakes}
+Niestety, ze względu na zupełny brak doświadczenia w projektowaniu układów elektronicznych oraz zwykłe niedopatrzenia, popełniony został szereg błędów, wymagający zmian w celu uruchomienia płytki.
+\newline \newline
+Pierwszym z wykrytych błędów, była bramka tranzystora włączającego przetwornice wisząca w powietrzu. Zaznaczony na schemacie \ref{img:power_sch} rezystor R6, dodany został już po wyprodukowaniu płytek. Ze względu na jego brak, bramka znajdowała się w niaustalonym stanie, a mówiąc kolokwialnie - pływała. Powodowało to włączanie i wyłączenie układu w krótkich odstępach czasu, co uwidoczniło się przez mruganie diody LED po podpięciu zasilania, ale nie doprowadzeniu zasilania na bramkę tranzystora. Uruchomiony raz układ, nie wyłączał się, ponieważ zgromadzone w bramce ładunki, nie miały gdzie ujść. Rozwiązaniem było właśnie dodanie rezystora R6 ściągającego do masy. Rozwiązanie na fragmencie layoutu oraz złożonej płytce, przedstawia rysunek \ref{img:fix_gate}. Kolorem żółtym, zaznaczono istotne elementy, pozwalające odnaleźć miejsce na schemacie oraz layoucie, a kolorem zielonym, dodany element.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/fix_gate.png}
+    \caption{Rezystor ściągający bramkę do masy}
+    \label{img:fix_gate}
+\end{figure}
+Jak się później okazało, wspomniany mosfet generował znacznie więcej problemów. Najważniejszym z nich, było nie włączanie przetwornicy MCP1642. Aby przetwornica mogła być włączona, napięcie na pinie EN, powinno wynosić 0.75 * Vin. W przypadku tego układu, wartość ta wynosi 3.5V. Niestety, w stworzonej konfiguracji, napięcie nie przekracza 1.5V. W trakcie realizacji projektu, podjęto kilka różnych prób przerobienia układu w taki sposób, aby przetwornica mogła zadziałać poprawnie. Wszystkie z nich, opisane zostały poniżej. Ostatecznie jednak, zdecydowano podłączyć pin EN na stałę do zasilania USB (Vbus). Nie niesie to za sobą znaczących konsekwencji, ponieważ przetwornica ta, zasila jedynie czujnik MQ2, a ten, jako czujnik analogowy, nie wymaga resetu. Obrazek \ref{img:fix_mcp1642} przedstawia zastosowaną poprawkę. Zielonym kolorem zaznaczono miejsce zwarcia ścieżki z pinem przetwornicy.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/fix_mcp1602.png}
+    \caption{Zwarcie pinu EN ze ścieżką Vbus}
+    \label{img:fix_mcp1642}
+\end{figure}
+\textbf{Dopisać o tych innych zmianach które próbowałem zrobić}
+Kolejnym z problemów, tym razem wynikającym z niedoczytania dokumentacji, było połączenie wewnętrznego LDO konwertera CP2102, z linią 3.3V. W efekcie, mimo wyłączonej przetwornicy MIC5365, układ utrzymywał zasilanie. W tym przypadku, prostym i szybkim rozwiązaniem było odcięcie ścieżki, łączącej konwerter z wyjściem przetwornicy MIC5365. Zmiana, widoczna jest na obrazku \ref{img:fix_ldo_cp}. Na zdjęciu widać również delikatne naruszenie ścieżki obok, linii rezystora ściągającego MQ2 do masy. Niestety, powstało ono podczas cięcia, ze względu na brak miejsca między komponentami. Nie wpływa ono jednak na działanie układu. Na tym samym zdjęciu, widać również kondensator z bardzo dużą ilością cyny. Jest to kondensator w obudowie 0603, który nie mieszcząc się na pady 0402 (niedostępny element), został dolutowany ,,rozszerzając'' pady cyną. Było to spore wyzwanie, aby nie zewrzeć wspomnianych padów, z pinami CP2102.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/fix_ldo_cp.png}
+    \caption{Przecięcie ścieżki 3.3V na wyjściu LDO CP2102}
+    \label{img:fix_ldo_cp}
+\end{figure}
+
+\textbf{Tu jeszcze coś innego będzie} \newline
+Jak wcześniej wspomniano, brak miejsca oraz inne czynniki, spowodowały, że nie wyprowadzono pinów programatora. O ile jednokrotne przylutowanie przewodów bezpośrednio do procesora, nie było szczególnym problemem, o tyle uciążliwym stało się podczas innych przeróbek. Przewody, wielokrotnie odpadały, gdy płytka została nagrzana. Tym samym w kolejnym projekcie, zdecydowanie należy wyprowadzić pady programatora możliwie daleko od reszty komponentów. Zdjęcie \ref{img:fix_swd} przedstawia przylutowane przewody.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{Graphics/fix_swd.png}
+    \caption{Przewody SWD wlutowane w procesor. Zielony - SWDCLK, Żółty - SWDIO}
+    \label{img:fix_swd}
+\end{figure}
 \begin{itemize}
-    \item Pokazać odcięcie LDO konwertera
-    \item Bramka wisząca w powietrzu
+    \item OK!!! Pokazać odcięcie LDO konwertera
+    \item OK!!! Bramka wisząca w powietrzu
     \item Zła przetwornica 5V (Vin > Vout)
+    \item Brak cewki = zwarcie xD
     \item Źle wsadzony mosfet. Pokazać możliwe przeróbki (OPAMP, rezystory, zdjęcia z prób i cięć).
-    \item Bypass przetwornicy
-    \item Ręczne lutowanie SWD do procka
+    \item OK!!! Bypass przetwornicy
+    \item OK!!! Ręczne lutowanie SWD do procka
 \end{itemize}
 

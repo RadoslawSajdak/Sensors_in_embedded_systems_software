@@ -48,5 +48,20 @@
   \field{howpublished}{\url{https://www.usb.org/document-library/usb-20-specification}}
     \field{title}{USB 2.0 specification}
   \endentry
+
+  \entry{jlcpcb_specification}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=J}{%
+         family={JLCPCB},
+         familyi={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{J1}
+    \strng{fullhash}{J1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{howpublished}{\url{https://m.jlcpcb.com/pcbAssembly}}
+    \field{title}{PCB Capabilities}
+  \endentry
 \enddatalist
 \endinput
