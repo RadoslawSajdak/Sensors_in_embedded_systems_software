@@ -31,5 +31,22 @@
   \field{howpublished}{\url{https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf}}
     \field{title}{MikroBUS standard specification}
   \endentry
+
+  \entry{usb_specification}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=oU}{%
+         family={organization},
+         familyi={o\bibinitperiod},
+         given={USB},
+         giveni={U\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{oU1}
+    \strng{fullhash}{oU1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://www.usb.org/document-library/usb-20-specification}}
+    \field{title}{USB 2.0 specification}
+  \endentry
 \enddatalist
 \endinput
