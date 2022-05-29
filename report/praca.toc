@@ -1,22 +1,22 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {polish}{}
 \contentsline {chapter}{\numberline {1}Wstęp}{3}%
-\contentsline {section}{\numberline {1.1}Mikrobus\texttrademark }{3}%
-\contentsline {section}{\numberline {1.2}STM32F103}{3}%
-\contentsline {section}{\numberline {1.3}STS30}{3}%
-\contentsline {section}{\numberline {1.4}BMP280}{3}%
-\contentsline {section}{\numberline {1.5}MQ2}{3}%
-\contentsline {section}{\numberline {1.6}Makefile}{3}%
-\contentsline {section}{\numberline {1.7}Github}{3}%
-\contentsline {chapter}{\numberline {2}Wykonanie projektu}{5}%
-\contentsline {section}{\numberline {2.1}Projekt płytki}{5}%
-\contentsline {subsection}{\numberline {2.1.1}Schemat}{5}%
-\contentsline {subsection}{\numberline {2.1.2}Layout}{5}%
-\contentsline {subsection}{\numberline {2.1.3}Popełnione błędy oraz wykonane przeróbki}{5}%
-\contentsline {section}{\numberline {2.2}Oprogramowanie}{6}%
-\contentsline {subsection}{\numberline {2.2.1}Biblioteki peryferiów}{6}%
-\contentsline {subsection}{\numberline {2.2.2}API}{6}%
-\contentsline {subsection}{\numberline {2.2.3}Niewykorzystane możliwości}{6}%
-\contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{6}%
-\contentsline {chapter}{\numberline {3}Prezentacja działania}{7}%
-\contentsline {chapter}{\numberline {4}Wnioski}{9}%
+\contentsline {section}{\numberline {1.1}mikroBUS\texttrademark }{3}%
+\contentsline {section}{\numberline {1.2}STM32F103}{4}%
+\contentsline {section}{\numberline {1.3}STS30}{4}%
+\contentsline {section}{\numberline {1.4}BMP280}{5}%
+\contentsline {section}{\numberline {1.5}MQ2}{5}%
+\contentsline {section}{\numberline {1.6}Makefile}{5}%
+\contentsline {section}{\numberline {1.7}Github}{5}%
+\contentsline {chapter}{\numberline {2}Wykonanie projektu}{7}%
+\contentsline {section}{\numberline {2.1}Projekt płytki}{7}%
+\contentsline {subsection}{\numberline {2.1.1}Schemat}{7}%
+\contentsline {subsection}{\numberline {2.1.2}Layout}{7}%
+\contentsline {subsection}{\numberline {2.1.3}Popełnione błędy oraz wykonane przeróbki}{7}%
+\contentsline {section}{\numberline {2.2}Oprogramowanie}{8}%
+\contentsline {subsection}{\numberline {2.2.1}Biblioteki peryferiów}{8}%
+\contentsline {subsection}{\numberline {2.2.2}API}{8}%
+\contentsline {subsection}{\numberline {2.2.3}Niewykorzystane możliwości}{8}%
+\contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{8}%
+\contentsline {chapter}{\numberline {3}Prezentacja działania}{9}%
+\contentsline {chapter}{\numberline {4}Wnioski}{11}%

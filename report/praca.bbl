@@ -16,5 +16,20 @@
   {}
 \endgroup
 
-\datalist[entry]{none/global//global/global}\enddatalist
+\datalist[entry]{none/global//global/global}
+  \entry{mikrobus_specification}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={MikroElektronika},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf}}
+    \field{title}{MikroBUS standard specification}
+  \endentry
+\enddatalist
 \endinput
