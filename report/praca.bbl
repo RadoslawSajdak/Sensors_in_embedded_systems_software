@@ -24,12 +24,42 @@
          familyi={M\bibinitperiod},
       }}%
     }
-    \strng{namehash}{M1}
-    \strng{fullhash}{M1}
+    \strng{namehash}{M3}
+    \strng{fullhash}{M3}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
   \field{howpublished}{\url{https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf}}
     \field{title}{MikroBUS standard specification}
+  \endentry
+
+  \entry{stm_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={ST},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S2}
+    \strng{fullhash}{S2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://www.st.com/resource/en/datasheet/stm32f103c8.pdf}}
+    \field{title}{STM32F103x8 Datasheet}
+  \endentry
+
+  \entry{sts_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={Sensiron},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S1}
+    \strng{fullhash}{S1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://sensirion.com/media/documents/1DA31AFD/61641F76/Sensirion_Temperature_Sensors_STS3x_Datasheet.pdf}}
+    \field{title}{STS3x-DIS Datasheet}
   \endentry
 
   \entry{usb_specification}{manual}{}
@@ -49,6 +79,70 @@
     \field{title}{USB 2.0 specification}
   \endentry
 
+  \entry{mq2_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=CHE}{%
+         family={CO.},
+         familyi={C\bibinitperiod},
+         given={HANWEI\bibnamedelima ELECTRONICS},
+         giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CHE1}
+    \strng{fullhash}{CHE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://www.mouser.com/datasheet/2/321/605-00008-MQ-2-Datasheet-370464.pdf}}
+    \field{title}{MQ-2 Gas Sensor Datasheet}
+  \endentry
+
+  \entry{mic_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={MICREL},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/mic5365.pdf}}
+    \field{title}{MIC5365-3.3YC5 Datasheet}
+  \endentry
+
+  \entry{bmp_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=B}{%
+         family={BOSCH},
+         familyi={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{B1}
+    \strng{fullhash}{B1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf}}
+    \field{title}{BMP280 Digital Pressure Sensor Datasheet}
+  \endentry
+
+  \entry{cp2102_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=LS}{%
+         family={Labs},
+         familyi={L\bibinitperiod},
+         given={Silicon},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LS1}
+    \strng{fullhash}{LS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://www.silabs.com/documents/public/data-sheets/cp2102n-datasheet.pdf}}
+    \field{title}{CP2102 Datasheet}
+  \endentry
+
   \entry{jlcpcb_specification}{manual}{}
     \name{author}{1}{}{%
       {{hash=J}{%
@@ -62,6 +156,21 @@
     \field{labeltitlesource}{title}
     \field{howpublished}{\url{https://m.jlcpcb.com/pcbAssembly}}
     \field{title}{PCB Capabilities}
+  \endentry
+
+  \entry{mcp_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={MICROCHIP},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M2}
+    \strng{fullhash}{M2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://ww1.microchip.com/downloads/en/DeviceDoc/20005253A.pdf}}
+    \field{title}{MCP1642B Datasheet}
   \endentry
 \enddatalist
 \endinput

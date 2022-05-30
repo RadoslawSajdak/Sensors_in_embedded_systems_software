@@ -440,6 +440,9 @@ INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/Graphics/fix_
 OUTPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/soft.aux
 INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/soft.tex
 INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/soft.tex
+INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/Graphics/API_Sensors.png
+INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/Graphics/API_Sensors.png
+INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/Graphics/API_Sensors.png
 OUTPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/dzialanie.aux
 INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/dzialanie.tex
 INPUT /home/roiz/Codes/Sensors_in_embedded_systems_software/report/dzialanie.tex

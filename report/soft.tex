@@ -22,10 +22,37 @@ Ostatni z czujników, to analogowy czujnik gazów. Stworzona do obsługi konwert
 Na potrzeby obsługi konwertera UART-USB, służącego do debugu kodu, stworzona została również prosta biblioteka do obsługi UARTu. Zawiera ona konfigurację peryferium oraz funkcję działającą jak printf, która zamiast na wyjście standardowe, kieruje dane na konkretny UART. W podobny sposób działa biblioteka obsługująca UART do komunikacji użytkownika z mikroprocesorem, wspomniana w podrozdziale \ref{sub:api}. Zostały one rozdzielone ze względu na zachowanie czystości w kodzie.
 \subsection{API}
 \label{sub:api}
-Założenia API. Jak działa, wrzucić grafy, listę komend(?), mechanizmy rejestracji komend jako coś, co pozwala łatwo rozbudować soft do innej aplikacji.
+Najważniejszym elementem projektu, spinającym wszystko w jedną całość, jest stworzone API (ang. Application Programming Interface). Pozwala ono użytkownikowi na komunikację z czujikami, przy użyciu interfejsu UART. Zdecydowano, że dla uproszczenia komunikacji, układ będzie zachowywać się podobnie do dostępnych na rynków modemów, wykorzystując komendy z przedrostkiem \textit{,,AT+''}. Diagram \ref{img:api_diagram} przedstawia schemat działania API. Zostało ono zrealizowane przy użyciu stałych tablic struktur, zawierających komendę oraz związany z nią callback, czyli wywołanie odpowiedniej funkcji bibliotek sensora. Dla ułatwienia obsługi oraz lepszej czytelności kodu, każdy z czujników posiada własną tablicę wywołań. Tym samym, działanie całego API, to tak naprawdę jedna pętla, wywoływana po wykryciu przez UART komendy \textit{,,AT+''}. Wyszukuje ona komendę na odpowiedniej liście, a następnie wywołuje związaną z nią funkcję. Takie podejście, pozwala w bardzo łatwy sposób rozbudowywać kod w przypadku chęci wykorzystania kolejnych czujników. Jedyne wymagane zmiany, to dodanie kolejnej listy zawierającej komendy oraz powiązane callbacki. Zgodnie z diagramem \ref{img:api_diagram}, w przypadku nierozpoznania komendy \textit{AT} układ zwraca użytkownikowi informację \textit{UNKNOWN} (ang. nieznany). \textbf{Kolejne komendy, rozpoznawane są przez znak kończący linię \textbackslash r}. W przypadku nierozpoznanych danych, przesłanych do mikroprocesora, zwrócona zostanie informacja \textit{ERROR} (ang. błąd).
 
-\subsection{Niewykorzystane możliwości}
-Nie wiem, tutaj mógłbym może napisać że zrobiłem kozak timery, ale w sumie to nie wiadomo po co bo API jest bezobsługowe xD No i może o tym, że Mati nie wiadomo po co pisał na F4...
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/API_Sensors.png}
+    \caption{Diagram działania API}
+    \label{img:api_diagram}
+\end{figure}
+
+\subsection{Lista dostępnych funkcji}
+\textbf{Ogólne}\newline
+   ,,AT+BMP\textbackslash r'' - Wybiera czujnik BMP280\newline
+   ,,AT+STS\textbackslash r'' - Wybiera czujnik STS3x-DIS\newline
+   ,,AT+MQ\textbackslash r'' - Wybiera czujnik MQ-2\newline
+   ,,AT+BACK\textbackslash r'' - Powrót do menu wyboru czujników\newline
+
+\textbf{BMP280}\newline
+   ,,AT+GETDATA\textbackslash r'' - odczytuje próbkę temperatury
+
+\textbf{MQ-2}\newline
+   ,,AT+GETDATA\textbackslash r'' - odczytuje stężenie wybranego wcześniej gazu
+
+\textbf{STS3x-DIS}\newline
+   ,,AT+GETDATA\textbackslash r'' - Odczytuje próbkę temperatury\newline
+   ,,AT+SETREPL\textbackslash r'' - Ustawia dokładność na niską \newline
+   ,,AT+SETREPM\textbackslash r'' - Ustawia dokładność na średnią\newline
+   ,,AT+SETREPH\textbackslash r'' - Ustawia dokładność na wysoką\newline
+   ,,AT+SETHEATON\textbackslash r'' - Włącza wewnętrzną grzałkę\newline
+   ,,AT+SETHEATOFF\textbackslash r'' - Wyłącza wewnętrzną grzałkę\newline
+   ,,AT+SRESET\textbackslash r'' - Programowy reset czujnika\newline
+   ,,AT+BACK\textbackslash r'' - Powrót do menu wyboru czujników\newline
 
 \subsection{System kontroli wersji}
 IMHO spoko też napisać, o tym, że korzystaliśmy z tego gita mocno, dbaliśmy o porządek, robiliśmy review itp. To jednak zjadło kupę czasu.

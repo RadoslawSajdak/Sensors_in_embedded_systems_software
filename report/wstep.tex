@@ -15,7 +15,7 @@ Ze względu na zmienione założenia projektu, stworzona płytka zgadza się ze 
 
 
 \section{STM32F103}
-Do stworzenia projektu, wybrano procesor STM32F103C8 z rdzeniem ARM\textregistered Cortex\textregistered-M3. Wybór, podyktowany był przede wszystkim dostępnością, ponieważ układ ten, w obudowach LQFP48 znajdował się w prywatnych zasobach zespołu. Obecnie, na rynku dostępne jest niewiele procesorów, a części elektroniczne są drogie. Z tego powodu, zdecydowano się korzystać z tego, co było dostępne. Nie oznacza to jednak, że procesor ten był pod jakimkolwiek względem ograniczający. Najistotniejszymi z jego cech są:
+Do stworzenia projektu, wybrano procesor STM32F103C8 z rdzeniem ARM\textregistered Cortex\textregistered-M3 \cite{stm_datasheet}. Wybór, podyktowany był przede wszystkim dostępnością, ponieważ układ ten, w obudowach LQFP48 znajdował się w prywatnych zasobach zespołu. Obecnie, na rynku dostępne jest niewiele procesorów, a części elektroniczne są drogie. Z tego powodu, zdecydowano się korzystać z tego, co było dostępne. Nie oznacza to jednak, że procesor ten był pod jakimkolwiek względem ograniczający. Najistotniejszymi z jego cech są:
 \begin{itemize}
     \item 2 interfejsy I$^2$C
     \item 3 interfejsy USART
@@ -28,7 +28,7 @@ Układ, programowany jest przy użyciu interfejsu SWD oraz programatora ST-link.
 
 \section{STS30}
 
-Sensor STS30-DIS marki Sensirion to cyfrowy, precyzyjny sensor temperatury. Wybraliśmy go jako przykładowy sensor działający po I$^2$C, oraz będący bardzo dobrze udokumentowany przez producenta. Oferuje dokładność 0.2 ℃ w zakresie temperatur 0-60 ℃, oraz funkcje takie jak wbudowane ogrzewanie, rejestr statusu, zmienny adres, soft reset po I$^2$C i wiele innych. Wszystkie dane z sensora są weryfikowane CRC-8.
+Sensor STS30-DIS marki Sensirion to cyfrowy, precyzyjny sensor temperatury. Wybraliśmy go jako przykładowy sensor działający po I$^2$C, oraz będący bardzo dobrze udokumentowany przez producenta. Oferuje dokładność 0.2 ℃ w zakresie temperatur 0-60 ℃, oraz funkcje takie jak wbudowane ogrzewanie, rejestr statusu, zmienny adres, soft reset po I$^2$C i wiele innych\cite{sts_datasheet}. Wszystkie dane z sensora są weryfikowane CRC-8.
 
 \section{BMP280}
 

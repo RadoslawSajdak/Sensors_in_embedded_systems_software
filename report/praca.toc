@@ -16,7 +16,7 @@
 \contentsline {section}{\numberline {2.2}Oprogramowanie}{22}%
 \contentsline {subsection}{\numberline {2.2.1}Biblioteki peryferiów}{22}%
 \contentsline {subsection}{\numberline {2.2.2}API}{23}%
-\contentsline {subsection}{\numberline {2.2.3}Niewykorzystane możliwości}{23}%
-\contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{23}%
-\contentsline {chapter}{\numberline {3}Prezentacja działania}{25}%
-\contentsline {chapter}{\numberline {4}Wnioski}{27}%
+\contentsline {subsection}{\numberline {2.2.3}Lista dostępnych funkcji}{25}%
+\contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{25}%
+\contentsline {chapter}{\numberline {3}Prezentacja działania}{27}%
+\contentsline {chapter}{\numberline {4}Wnioski}{29}%
