@@ -93,7 +93,22 @@ Jak się później okazało, wspomniany mosfet generował znacznie więcej probl
     \caption{Zwarcie pinu EN ze ścieżką Vbus}
     \label{img:fix_mcp1642}
 \end{figure}
-\textbf{Dopisać o tych innych zmianach które próbowałem zrobić}
+Jedną z prób naprawienia układu, było przerobienie fragmentu z tranzystorem NMOS. Zmiany, przedstawiono na rysunku \ref{img:fix_gate_2}. Odcięto źródło tranzystora, a następnie zwarto je do masy. Tak samo jak w opisanym wcześniej przypadku, dodano rezystor ściągający bramkę do masy. Między dren a zasilanie, dodany został rezystor o wartości 1k$\Omega$. W tej konfiguracji, układ wyłączany byłby stanem wysokim, co rozwiązano w przykładzie poniżej. Niestety, przerobienie układu w ten sposób nie przyniosło zamierzonego efektu. Mała ilość miejsca wymusiła ręczne wlutowanie rezystora fizycznie pod tranzystor, a jednocześnie prawdopodobnie między wszystkimi cięciami i padami występowało jakieś niepożądane zwarcie. Niemniej jednak, w przypadku ponownej produkcji płytki, zmiana ta mogłaby być wprowadzona.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/fix_gate_2.png}
+    \caption{Poprawiony schemat z użyciem tranzystora NMOS}
+    \label{img:fix_gate_2}
+\end{figure}
+Powyższe rozwiązanie, ma zasadniczą wadę - układ domyślnie jest włączony. Sprawia to, że użytkownik zanim napisze fragment programu mogący sterować układem włączania i wyłączania zasilania, pracuje z układem o pewnym napięciu. Układ pracując może wysyłać lub odbierać dane na pinach RX/TX, a także sterować pinem INT. Nie jest to zachowanie pożądane. Z tego powodu, wykorzystując dostępne komponenty, zaproponowano również układ ze wzmacniaczem operacyjnym w konfiguracji wtórnika odwracającego. Układ, przedstawiono na schemacie \ref{img:fix_gate_3}. Podejście to, w przypadku możliwości skorzystania z innych komponentów, byłoby zupełnie nieopłacalne - w szczególności na dużą skalę. Dodatkowy układ w postaci wzmacniacza operacyjnego, podwyższyłby niepotrzebnie jednostkowy koszt produkcji płytki.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/fix_gate_3.png}
+    \caption{Schemat poprawionego klucza NMOS, włączanego stanem wysokim}
+    \label{img:fix_gate_3}
+\end{figure}
+
 Kolejnym z problemów, tym razem wynikającym z niedoczytania dokumentacji, było połączenie wewnętrznego LDO konwertera CP2102, z linią 3.3V. W efekcie, mimo wyłączonej przetwornicy MIC5365, układ utrzymywał zasilanie. W tym przypadku, prostym i szybkim rozwiązaniem było odcięcie ścieżki, łączącej konwerter z wyjściem przetwornicy MIC5365. Zmiana, widoczna jest na obrazku \ref{img:fix_ldo_cp}. Na zdjęciu widać również delikatne naruszenie ścieżki obok, linii rezystora ściągającego MQ2 do masy. Niestety, powstało ono podczas cięcia, ze względu na brak miejsca między komponentami. Nie wpływa ono jednak na działanie układu. Na tym samym zdjęciu, widać również kondensator z bardzo dużą ilością cyny. Jest to kondensator w obudowie 0603, który nie mieszcząc się na pady 0402 (niedostępny element), został dolutowany ,,rozszerzając'' pady cyną. Było to spore wyzwanie, aby nie zewrzeć wspomnianych padów, z pinami CP2102.
 \begin{figure}[H]
     \centering
@@ -102,7 +117,6 @@ Kolejnym z problemów, tym razem wynikającym z niedoczytania dokumentacji, był
     \label{img:fix_ldo_cp}
 \end{figure}
 
-\textbf{Tu jeszcze coś innego będzie} \newline
 Jak wcześniej wspomniano, brak miejsca oraz inne czynniki, spowodowały, że nie wyprowadzono pinów programatora. O ile jednokrotne przylutowanie przewodów bezpośrednio do procesora, nie było szczególnym problemem, o tyle uciążliwym stało się podczas innych przeróbek. Przewody, wielokrotnie odpadały, gdy płytka została nagrzana. Tym samym w kolejnym projekcie, zdecydowanie należy wyprowadzić pady programatora możliwie daleko od reszty komponentów. Zdjęcie \ref{img:fix_swd} przedstawia przylutowane przewody.
 
 \begin{figure}[H]
@@ -111,13 +125,11 @@ Jak wcześniej wspomniano, brak miejsca oraz inne czynniki, spowodowały, że ni
     \caption{Przewody SWD wlutowane w procesor. Zielony - SWDCLK, Żółty - SWDIO}
     \label{img:fix_swd}
 \end{figure}
-\begin{itemize}
-    \item OK!!! Pokazać odcięcie LDO konwertera
-    \item OK!!! Bramka wisząca w powietrzu
-    \item Zła przetwornica 5V (Vin > Vout)
-    \item Brak cewki = zwarcie xD
-    \item Źle wsadzony mosfet. Pokazać możliwe przeróbki (OPAMP, rezystory, zdjęcia z prób i cięć).
-    \item OK!!! Bypass przetwornicy
-    \item OK!!! Ręczne lutowanie SWD do procka
-\end{itemize}
+Ostatni z napotkanych problemów, wynikał z prostego niedopatrzenia. Większość elementów pasywnych, użytych do zlutowania układu, zostało wzięte od prowadzącego. Niestety, nie posiadał on cewki 4.7uH. Ponieważ zamówienie zostało złożone wcześniej, nie opłacało się zamawiać nawet kilku cewek, ponieważ koszt dostawy znacząco przerósłby ich wkład w działanie układu. Biorąc pod uwagę, że cały układ zasilany jest prądem stałym, a cewka dla prądu stałego stanowi zwarcie, w miejsce cewki wstawiono zworkę. Pozwoliło to na uruchomienie układu. Należy jednak pamiętać, że cewka w tym miejscu prawdopodobnie zabezpiecza układ przed prądem udarowym, występującym w momencie włączenia zasilania układu. Dlatego, na potrzeby prototypu można było usunąć cewkę, jednak w produkcie komercyjnym byłoby to niedopuszczalne.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{Graphics/fix_inductor.png}
+    \caption{Zworka zastępująca cewkę}
+    \label{img:fix_inductor}
+\end{figure}
 

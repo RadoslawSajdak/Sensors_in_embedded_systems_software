@@ -1,7 +1,27 @@
 \section{Oprogramowanie}
 \subsection{Biblioteki peryferiów}
-Krótko opisać jakie były założenia przy tworzeniu peryferiów (rozbicie drzewka kodu dla porządku, ustandaryzowane kody błędów, osobne libki na wszystko itp.)
+Na etapie planowania projektów, podjęto decyzję o samodzielnym stworzeniu bibliotek do każdego z czujników. Takie podejście, narzuciło konieczność ujednolicenia sposobu tworzenia kodu. Zdecydowano, że każda biblioteka, będzie korzystać z nakładki na funkcje HALa. Pozwoliło to wprowadzić obsługę błędów na wszystkich poziomach oprogramowania. Kod, tworzony był w sposób możliwie uniwersalny. Dzięki temu, płytka może być łatwo rozbudowana o kolejne czujniki, przy jednocześnie niewielkich zmianach w kodzie programu. Poniżej, krótko omówiono oprogramowanie każdego z czujników, oraz związane z nim biblioteki. Dla zachowania porządku, zdecydowano się rozdzielić w projekcie sterowniki dostarczane przez ST, pliki nagłówkowe oraz stworzone biblioteki. Zastosowanie opisanego w rozdziale \ref{cha:introduction} makefile, pozwoliło w łatwy sposób zdefiniować ścieżki dla kompilatora.
+\newline
+\textbf{BMP280}
+\newline
+Pierwszy z czujników, jest czujnikiem komunikującym się z mikroprocesorem z wykorzystaniem SPI (Serial Peripheral Interface). Pozwala on na wykonywanie pomiarów temperatury oraz ciśnienia. Stworzona biblioteka \textit{,,spi.c''} pozwala w łatwy sposób zainicjalizować peryferium w zdefiniowany sposób, odpowiedni dla stworzonej płytki. Osobna funkcja inicjalizująca piny SS (Slave Select) umożliwia szybkie dodanie kolejnych czujników działających z użyciem SPI. Wymaga to jedynie zainicjalizowania pinu. Dwie kolejne funkcje, odpowiadają za kolejno wysyłanie i odczytywanie danych przy użyciu SPI. Interesującym kierunkiem rozbudowy biblioteki, byłaby możliwość rejestracji pinów SS, co zdjęłoby z użytkownika konieczność samodzielnej kontroli nad używanym interfejsem oraz pinami. W przypadku tej wersji płytki, nie było to jednak konieczne. Biblioteka \textit{,,bmp280.c''} korzystająca z \textit{,,spi.c''}, odpowiada za podstawową obsługę czujnika BMP280. Poza podstawowymi możliwościami konfiguracji zgodnie z dokumentacją producenta, wykonuje wszelkie obliczenia, zdejmując z użytkownika konieczność przeliczenia danych z rejestrów.
+\newline
+\newline
+\textbf{STS3x-DIS}
+\newline
+Kolejny z czujników to czujnik temperatury. Od poprzednika, różni się większą złożonością i lepszą precyzją. Do komunikacji, wykorzystuje magistralę I$^2$C. Stworzona do jego obsługi biblioteka, pozwala zmieniać jego konfigurację przy użyciu czytelnych stałych. Zapewnia nie tylko obsługę rejestrów czujnika, ale również kontrolę CRC otrzymywanych danych. Dzięki temu, użytkownik może być pewien otrzymywanych wartości.
+\newline
+\newline
+\textbf{MQ-2}
+\newline
+Ostatni z czujników, to analogowy czujnik gazów. Stworzona do obsługi konwertera A/D inicjalizuje wybrane ADC mikoprocesora oraz konkretny kanał, według wartości odpowiednich dla stworzonej płytki. Posiada również funkcję pobrania próbki wybranego konwertera. Sama biblioteka obsługująca MQ-2, poza inicjalizacją i kalibracją sensora, pozwala użytkownikowi na pobranie przetworzonych lub surowych danych z czujnika, dla wybranego gazu. Dodatkową funkcją, jest możliwość ustawienia alarmu dla wybranego gazu, na zdefiniowany przez użytkownika próg. Przekroczenie wybranej wartości wyzwoli alarm oraz wysteruje pin INT standardu mikroBUS\texttrademark. Aby umożliwić swobodne tworzenie funkcji przerwań czasowych w dowolnej ilości, stworzona została biblioteka \textit{,,timers.c''}. Przy użyciu jednokierunkowej, dynamicznej listy stuktur oraz mechanizmu SysTick (przerwania wyzwalanego co 1ms) użytkownik może dodawać własne funkcje o predefiniowanym typie, a następnie wywołać je po upływie określonego czasu. Dodatkowa flaga, pozwala włączyć okresowe wyzwalanie danej funkcji. Zaletą tego podejścia jest przede wszystkim ,,nieograniczona'' liczba liczników, jednak niepoprawne wykorzystanie biblioteki (np. funkcje o długim czasie wykonywania), może prowadzić do utraty precyzji liczników.
+\newline
+\newline
+\textbf{CP2102}
+\newline
+Na potrzeby obsługi konwertera UART-USB, służącego do debugu kodu, stworzona została również prosta biblioteka do obsługi UARTu. Zawiera ona konfigurację peryferium oraz funkcję działającą jak printf, która zamiast na wyjście standardowe, kieruje dane na konkretny UART. W podobny sposób działa biblioteka obsługująca UART do komunikacji użytkownika z mikroprocesorem, wspomniana w podrozdziale \ref{sub:api}. Zostały one rozdzielone ze względu na zachowanie czystości w kodzie.
 \subsection{API}
+\label{sub:api}
 Założenia API. Jak działa, wrzucić grafy, listę komend(?), mechanizmy rejestracji komend jako coś, co pozwala łatwo rozbudować soft do innej aplikacji.
 
 \subsection{Niewykorzystane możliwości}
