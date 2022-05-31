@@ -132,7 +132,7 @@ void api_mq2_set_tracking(void)
     
 }
 
-void api_mq2_clear_tracking(void)
+void api_mq2_stop_tracking(void)
 {
     clear_irq_pin();
     mq2_stop_tracking();

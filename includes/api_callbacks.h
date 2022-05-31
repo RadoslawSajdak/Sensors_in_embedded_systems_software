@@ -36,6 +36,6 @@ void api_mq2_get_LPG(void);
 void api_mq2_get_CO(void);
 void api_mq2_get_SMOKE(void);
 void api_mq2_set_tracking(void);
-void api_mq2_clear_tracking(void);
+void api_mq2_stop_tracking(void);
 
 #endif

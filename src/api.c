@@ -170,9 +170,8 @@ static uint32_t str_to_u32(char *num_as_string)
 {
     uint8_t digits = strlen(num_as_string);
     uint32_t number = 0U;
-    number += num_as_string[0] - 48;
 
-    for(uint8_t i = 1U; i < digits; i++)
+    for(uint8_t i = 0U; i < digits; i++)
     {
         number *= 10;
         number += (num_as_string[i] - 48);
