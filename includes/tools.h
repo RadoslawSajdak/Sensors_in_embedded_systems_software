@@ -45,6 +45,8 @@
 #define API_UART_TX_PIN             GPIO_PIN_9
 #define API_UART_RX_PIN             GPIO_PIN_10
 
+#define MQ2_CHANNEL                 ADC_CHANNEL_0
+#define MQ2_INSTANCE                ADC1
 
 typedef enum {
     OK = 0,
@@ -56,6 +58,7 @@ typedef enum {
     NO_TIMERS_ERROR = 6,
     INCORRECT_PRESSURE_ERROR = 7,
     NO_CONFIG_ERROR = 8,
+    CALIBRATION_ERROR = 9,
 } hub_retcode_t;
 
 #endif
