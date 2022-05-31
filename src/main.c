@@ -4,6 +4,7 @@
 #include "tools.h"
 #include "bmp280.h"
 #include "sts3x_dis.h"
+#include "mq2.h"
 #include "boards.h"
 #include "debug_uart.h"
 #include "timers.h"
@@ -25,11 +26,12 @@ GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 int main(void)
 {
-
+    
     SystemClock_Config();
     timers_init();
     HAL_Init();
     MX_GPIO_Init();
+    mq2_init(MQ2_INSTANCE, MQ2_CHANNEL);
     debug_uart_init(115200);
     init_done();
     /////////////
@@ -62,6 +64,13 @@ static void MX_GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(LED_port, &GPIO_InitStruct);
+
+    /*Configure GPIO pins : INT_pin(PB12) */
+    GPIO_InitStruct.Pin = IRQ_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(IRQ_GPIO, &GPIO_InitStruct);
 
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
 	GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;		// SCL, SDA

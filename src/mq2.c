@@ -72,6 +72,11 @@ hub_retcode_t mq2_track_data(uint32_t timeout, mq2_gas_t gas, uint16_t treshold,
     return timers_add_timer(timeout, mq2_update, 1);
 }
 
+hub_retcode_t mq2_stop_tracking(void)
+{
+    return timers_stop_timer(mq2_update);
+}
+
 uint16_t mq2_get_sample(void){
     
     return mq2_data.raw;

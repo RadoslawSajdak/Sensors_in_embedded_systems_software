@@ -48,6 +48,9 @@
 #define MQ2_CHANNEL                 ADC_CHANNEL_0
 #define MQ2_INSTANCE                ADC1
 
+#define IRQ_GPIO                    GPIOB
+#define IRQ_PIN                     GPIO_PIN_12
+
 typedef enum {
     OK = 0,
     INIT_ERROR = 1,
