@@ -64,7 +64,7 @@ static const command_handlers_s         __mq_command_list[MAX_COMMAND_NUMBER] = 
                                                                                     {.command = "GETCO", .callback = api_mq2_get_CO},
                                                                                     {.command = "GETSMOKE", .callback = api_mq2_get_SMOKE},
                                                                                     {.command = "SETTRACKING", .callback = api_mq2_set_tracking},
-                                                                                    {.command = "STOPTRACKING", .callback = api_mq2_clear_tracking},
+                                                                                    {.command = "STOPTRACKING", .callback = api_mq2_stop_tracking},
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};;
 static const command_handlers_s         *__sensor_choice[MAX_COMMAND_CHOICE] = {__menu_command_list, __bmp_command_list, __sts_command_list, __mq_command_list};
 
