@@ -20,3 +20,5 @@
 \contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{25}%
 \contentsline {chapter}{\numberline {3}Prezentacja działania}{27}%
 \contentsline {chapter}{\numberline {4}Wnioski}{29}%
+\babel@toc {polish}{}
+\babel@toc {polish}{}

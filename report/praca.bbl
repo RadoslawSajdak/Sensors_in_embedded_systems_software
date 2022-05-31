@@ -172,5 +172,27 @@
   \field{howpublished}{\url{https://ww1.microchip.com/downloads/en/DeviceDoc/20005253A.pdf}}
     \field{title}{MCP1642B Datasheet}
   \endentry
+
+  \entry{pragmatic}{book}{}
+    \name{author}{1}{}{%
+      {{hash=TDHA}{%
+         family={Thomas\bibnamedelima D.},
+         familyi={T\bibinitperiod\bibinitdelim D\bibinitperiod},
+         given={Hunt\bibnamedelima A.},
+         giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Wydawnictwo Helion}%
+    }
+    \strng{namehash}{TDHA1}
+    \strng{fullhash}{TDHA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{KINDLE LOC 2757}
+    \field{title}{Pragmatyczny programista. Od czeladnika do mistrza}
+    \field{langid}{polish}
+    \field{year}{2021}
+  \endentry
 \enddatalist
 \endinput
