@@ -8,7 +8,6 @@
 #include "debug_uart.h"
 #include "timers.h"
 #include "api.h"
-#include "mq2.h"
 
 #ifdef STM32F1
 #include "stm32f1xx_hal.h"
@@ -21,7 +20,6 @@
 
 static void MX_GPIO_Init(void);
 static void init_done(void);
-static void alarm();
 
 GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -32,15 +30,7 @@ int main(void)
     timers_init();
     HAL_Init();
     MX_GPIO_Init();
-    if(OK != mq2_init(MQ2_INSTANCE, MQ2_CHANNEL)) while(1);
-    mq2_track_data(200, LPG_MQ2, 2000, alarm);
-    uint16_t adc_data;
-    while(1)
-    {
-        adc_data = mq2_get_ppm(LPG_MQ2);
-        printf("%d", adc_data);
-        HAL_Delay(2000);
-    }
+    debug_uart_init(115200);
     init_done();
     /////////////
 
@@ -49,10 +39,6 @@ int main(void)
     {
         ;
     }
-}
-
-static void alarm(){
-  printf("pali sie pali");
 }
 
 static void init_done(void)
