@@ -36,7 +36,13 @@ hub_retcode_t adc_init(ADC_HandleTypeDef *hadc, ADC_TypeDef *instance, uint32_t 
 
     sConfig.Channel = channel;
     sConfig.Rank = 1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
+#ifdef STM32F1 
+        sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
+#else
+    #ifdef STM32F4
+        sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+    #endif
+#endif
     if (HAL_ADC_ConfigChannel(hadc, &sConfig) != HAL_OK)
     {
         return INIT_ERROR;
