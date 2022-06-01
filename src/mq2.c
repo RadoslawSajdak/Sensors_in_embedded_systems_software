@@ -78,7 +78,7 @@ hub_retcode_t mq2_stop_tracking(void)
 }
 
 uint16_t mq2_get_sample(void){
-    
+    mq2_update();
     return mq2_data.raw;
 }
 
