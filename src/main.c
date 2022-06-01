@@ -21,8 +21,10 @@
 
 static void MX_GPIO_Init(void);
 static void init_done(void);
+static void I2C_Init(void);
 
 GPIO_InitTypeDef GPIO_InitStruct = {0};
+I2C_HandleTypeDef I2C_InitStruct = {0};
 
 int main(void)
 {
@@ -31,7 +33,11 @@ int main(void)
     timers_init();
     HAL_Init();
     MX_GPIO_Init();
-    mq2_init(MQ2_INSTANCE, MQ2_CHANNEL);
+    I2C_Init();
+    if(OK != sts3x_dis_init(&I2C_InitStruct, false, false)) while(1);
+    if(OK != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
+    HAL_Delay(2000);
+    if(OK != mq2_init(MQ2_INSTANCE, MQ2_CHANNEL)) while(1);
     debug_uart_init(115200);
     init_done();
     /////////////
@@ -78,4 +84,20 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+}
+
+static void I2C_Init(void)
+{
+    __HAL_RCC_I2C1_CLK_ENABLE();
+    I2C_InitStruct.Instance             = I2C1;
+	I2C_InitStruct.Init.ClockSpeed      = 100000;
+	I2C_InitStruct.Init.DutyCycle       = I2C_DUTYCYCLE_2;
+	I2C_InitStruct.Init.OwnAddress1     = 0xff;
+	I2C_InitStruct.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+	I2C_InitStruct.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	I2C_InitStruct.Init.OwnAddress2     = 0xff;
+	I2C_InitStruct.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	I2C_InitStruct.Init.NoStretchMode   = I2C_NOSTRETCH_DISABLE;
+
+    HAL_I2C_Init(&I2C_InitStruct);
 }

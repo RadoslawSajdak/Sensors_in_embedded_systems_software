@@ -1,7 +1,7 @@
 #include "api_uart.h"
 #define MAX_MSG_LEN                 100
-#define UART_TIMEOUT                1000 //msec
-#define UART_BUFFER                 1000
+#define UART_TIMEOUT                2000 //msec
+#define UART_BUFFER                 2000
 
 static UART_HandleTypeDef uart;
 

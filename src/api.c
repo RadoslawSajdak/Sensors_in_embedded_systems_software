@@ -122,7 +122,9 @@ void parse_parameters(char *msg)
 hub_retcode_t wait_for_message(char *message)
 {
     uint16_t counter = 0U;
+    uint32_t len = 0;
     char buffer[MESSAGE_BUFFER] = {0};
+    char *args_begin = NULL;
     while (1)
     {
         if(counter == MESSAGE_BUFFER) for(; counter > 0; counter--) buffer[counter] = 0;
@@ -132,7 +134,14 @@ hub_retcode_t wait_for_message(char *message)
                 timers_add_timer(WAIT_FOR_MSG_TIMEOUT_MS, api_msg_timeout_handler, false);
                 if( 0 == strncmp(buffer, message, strlen(message)))
                 {
-                    strncpy(g_last_msg, buffer + 3, strlen(message));
+                    args_begin = memchr(buffer, ',', strlen(buffer));
+                    if(NULL == args_begin)
+                        strncpy(g_last_msg, buffer + 3, strlen(buffer));
+                    else
+                    {
+                        len = (uint32_t)(args_begin - buffer - 1);
+                        strncpy(g_last_msg, buffer + 3, len);
+                    }
                     parse_parameters(buffer + 3);
                     return OK;
                 }
