@@ -42,6 +42,13 @@ uint16_t mq2_get_sample();
 hub_retcode_t mq2_track_data(uint32_t timeout, mq2_gas_t gas, uint16_t treshold, mq2_callback_t alarm);
 
 /****************************
+ * @brief Stop tracking data
+ * 
+ * @return 0 if succes, else error number
+ * **************************/
+hub_retcode_t mq2_stop_tracking(void);
+
+/****************************
  * @brief Get last sample in ppm
  * 
  * @param gas select gas {LPG_MQ2, CO_MQ2, SMOKE_MQ2}

@@ -48,7 +48,8 @@ src/timers.c \
 src/boards.c \
 src/mq2.c \
 src/adc.c \
-src/api_uart.c
+src/api_uart.c \
+src/api_callbacks.c
 
 ######################################
 # ^^^^^^ SETTINGS - adding libs ^^^^^^
