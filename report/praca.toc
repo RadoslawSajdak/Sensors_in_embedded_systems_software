@@ -19,6 +19,6 @@
 \contentsline {subsection}{\numberline {2.2.3}Lista dostępnych funkcji}{25}%
 \contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{26}%
 \contentsline {chapter}{\numberline {3}Prezentacja działania}{27}%
-\contentsline {chapter}{\numberline {4}Wnioski}{29}%
+\contentsline {chapter}{\numberline {4}Wnioski}{31}%
 \babel@toc {polish}{}
 \babel@toc {polish}{}
