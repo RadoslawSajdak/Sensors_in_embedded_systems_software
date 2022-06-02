@@ -32,6 +32,39 @@ void api_menu_set_bmp(void)
 {
     g_chosen_sensor = BMP_COMMANDS;
 }
+
+void api_bmp_soft_reset(void)
+{
+    bmp280_reset();
+}
+
+void api_bmp_set_config(void)
+{
+    if(g_command_param_counter != 4)
+    {
+        api_send_response(1);
+        return;
+    }
+    bmp280_config_s temp_config = { .osrs_temperature = g_command_parameters[0], .osrs_pressure = g_command_parameters[1],\
+                                    .standby = g_command_parameters[2], .mode = g_command_parameters[3] };
+    if(OK == bmp280_set_config(&temp_config))
+        api_send_response(0);
+    else
+        api_send_response(1);
+}
+
+void api_bmp_get_ready(void)
+{
+    if(OK == bmp280_ready())
+    {
+        api_send_response(0);
+    }
+    else
+    {
+        api_send_response(1);
+    }
+}
+
 void api_menu_set_sts(void)
 {
     g_chosen_sensor = STS_COMMANDS;

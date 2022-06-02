@@ -37,6 +37,7 @@ hub_retcode_t           wait_for_message(char *message);
 hub_retcode_t           parse_at_command(void);
 static void             api_msg_timeout_handler(void);
 static uint32_t         str_to_u32(char *num_as_string);
+static inline
 
 
 /***** Local Variables *****/
@@ -48,6 +49,9 @@ static const command_handlers_s         __menu_command_list[MAX_COMMAND_NUMBER] 
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};
 
 static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_bmp_get_data},
+                                                                                    {.command = "SETCONFIG", .callback = api_bmp_set_config},
+                                                                                    {.command = "WAITRDY", .callback = api_bmp_get_ready},
+                                                                                    {.command = "SRESET", .callback = api_bmp_soft_reset},
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};
 
 static const command_handlers_s         __sts_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_sts_get_temp},
@@ -79,6 +83,9 @@ void run_api(void)
         if(g_last_msg != NULL)
         {
             debug_uart_printf("GOT a message! %s\n", g_last_msg);
+            if(g_command_param_counter > 0) 
+                debug_uart_printf("Parsed params: %d %d %d %d %d\n", g_command_parameters[0],g_command_parameters[1], \
+                g_command_parameters[2], g_command_parameters[3], g_command_parameters[4]);
             parse_at_command();
         }
     }
@@ -139,7 +146,7 @@ hub_retcode_t wait_for_message(char *message)
                         strncpy(g_last_msg, buffer + 3, strlen(buffer));
                     else
                     {
-                        len = (uint32_t)(args_begin - buffer - 1);
+                        len = (uint32_t)(args_begin - buffer - 3);
                         strncpy(g_last_msg, buffer + 3, len);
                     }
                     parse_parameters(buffer + 3);

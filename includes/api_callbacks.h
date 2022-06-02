@@ -23,7 +23,12 @@ void api_menu_set_bmp(void);
 void api_menu_set_sts(void);
 void api_menu_set_mq(void);
 void api_menu_set_default(void);
+
 void api_bmp_get_data(void);
+void api_bmp_soft_reset(void);
+void api_bmp_set_config(void);
+void api_bmp_get_ready(void);
+
 void api_sts_get_temp(void);
 void api_sts_set_repeatability_low(void);
 void api_sts_set_repeatability_medium(void);
@@ -31,6 +36,7 @@ void api_sts_set_repeatability_high(void);
 void api_sts_set_heater_on(void);
 void api_sts_set_heater_off(void);
 void api_sts_soft_reset(void);
+
 void api_mq2_get_sample(void);
 void api_mq2_get_LPG(void);
 void api_mq2_get_CO(void);
