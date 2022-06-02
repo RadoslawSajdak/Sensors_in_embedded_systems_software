@@ -39,10 +39,20 @@ Najważniejszym elementem projektu, spinającym wszystko w jedną całość, jes
    ,,AT+BACK\textbackslash r'' - Powrót do menu wyboru czujników\newline
 
 \textbf{BMP280}\newline
-   ,,AT+GETDATA\textbackslash r'' - odczytuje próbkę temperatury
+   ,,AT+GETDATA\textbackslash r'' - odczytuje próbkę temperatury\newline
+   ,,AT+SETCONFIG,\lbrack temp\rbrack,\lbrack pressure\rbrack,\lbrack standby\rbrack,\lbrack mode\rbrack\textbackslash r'' - Ustawia konfigurację według parametrów z dokumentacji producenta: \lbrack temp\rbrack - temperature\textunderscore sampling, \lbrack pressure\rbrack - pressure\textunderscore sampling, \lbrack standby\rbrack - standby\textunderscore period, \lbrack mode\rbrack - running\textunderscore mode. Eg. \textit{AT+SETCONFIG,128,16,0,3\textbackslash r}\newline
+   ,,AT+WAITRDY\textbackslash r'' - Czeka na flagę RDY rejetru statusowego. Timeout = 20s.\newline
+   ,,AT+SREST\textbackslash r'' - Programowy reset czujnika\newline
+   ,,AT+BACK\textbackslash r'' - Powrót do menu wyboru czujników\newline
 
 \textbf{MQ-2}\newline
-   ,,AT+GETDATA\textbackslash r'' - odczytuje stężenie wybranego wcześniej gazu
+   ,,AT+GESAMPLE\textbackslash r'' - Odczytuje surową wartość ADC.\newline
+   ,,AT+GETLPG\textbackslash r'' - Odczytuje przeliczone stężenie LPG.\newline
+   ,,AT+GETCO\textbackslash r'' - Odczytuje przeliczone stężenie CO.\newline
+   ,,AT+GETSMOKE\textbackslash r'' - Odczytuje przeliczone stężenie dymu.\newline
+   ,,AT+SETTRACKING,\lbrack timeout\rbrack,\lbrack gas\rbrack,\lbrack threshold\rbrack\textbackslash r'' - Ustawia śledzenie stężenia wybranego gazu. Po wyzwoleniu alarmu, pin INT ustawiany jest w stan niski. Przerwanie czyszczone jest w momencie odczytu dowolnych danych. \lbrack timeout\rbrack - Okres między próbkami, \lbrack gas\rbrack - wybrany gaz (0-LPG, 1-CO, 2-SMOKE), \lbrack threshold\rbrack - Wartość progowa alarmu.\newline
+   ,,AT+STOPTRACKING\textbackslash r'' - Przerywa śledzenie gazu. Czyści przerwanie, jeśli wystąpiło. \newline
+   ,,AT+BACK\textbackslash r'' - Powrót do menu wyboru czujników\newline
 
 \textbf{STS3x-DIS}\newline
    ,,AT+GETDATA\textbackslash r'' - Odczytuje próbkę temperatury\newline
