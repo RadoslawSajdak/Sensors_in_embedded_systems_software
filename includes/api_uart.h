@@ -3,7 +3,6 @@
 
 #include "tools.h"
 #include "stdint.h"
-#define MAX_MSG_LEN                 100
 
 hub_retcode_t api_uart_init(uint32_t baudrate);
 

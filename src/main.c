@@ -4,6 +4,7 @@
 #include "tools.h"
 #include "bmp280.h"
 #include "sts3x_dis.h"
+#include "mq2.h"
 #include "boards.h"
 #include "debug_uart.h"
 #include "timers.h"
@@ -27,16 +28,17 @@ I2C_HandleTypeDef I2C_InitStruct = {0};
 
 int main(void)
 {
-
+    
     SystemClock_Config();
     timers_init();
     HAL_Init();
     MX_GPIO_Init();
     I2C_Init();
+    if(OK != sts3x_dis_init(&I2C_InitStruct, false, false)) while(1);
+    if(OK != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
+    HAL_Delay(2000);
+    if(OK != mq2_init(MQ2_INSTANCE, MQ2_CHANNEL)) while(1);
     debug_uart_init(115200);
-    
-    if(0 != sts3x_dis_init(&I2C_InitStruct, false, false)) while(1);
-    if( 0 != bmp280_init(SPI1, SPI_CSB_GPIO, SPI_CSB_Pin)) while(1);
     init_done();
     /////////////
 
@@ -68,6 +70,13 @@ static void MX_GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(LED_port, &GPIO_InitStruct);
+
+    /*Configure GPIO pins : INT_pin(PB12) */
+    GPIO_InitStruct.Pin = IRQ_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(IRQ_GPIO, &GPIO_InitStruct);
 
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
 	GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;		// SCL, SDA
