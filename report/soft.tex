@@ -32,6 +32,8 @@ Najważniejszym elementem projektu, spinającym wszystko w jedną całość, jes
 \end{figure}
 
 \subsection{Lista dostępnych funkcji}
+\textbf{W przypadku poprawnego użycia funkcji, moduł zwróci komendę ,,OK''. Niepoprawna komenda dla danego sensora, skutkuje błędem ,,UNKNOWN'', a zbiór złych danych powoduje ,,ERROR''. Dodatkowo, w przypadku komend zawierających parametry, poza powyższymi, układ zwróci ,,0'' w przypadku poprawnego odczytania parametrów lub ,,1'' w przypadku błędu.}\newline\newline
+
 \textbf{Ogólne}\newline
    ,,AT+BMP\textbackslash r'' - Wybiera czujnik BMP280\newline
    ,,AT+STS\textbackslash r'' - Wybiera czujnik STS3x-DIS\newline
@@ -39,7 +41,8 @@ Najważniejszym elementem projektu, spinającym wszystko w jedną całość, jes
    ,,AT+BACK\textbackslash r'' - Powrót do menu wyboru czujników\newline
 
 \textbf{BMP280}\newline
-   ,,AT+GETDATA\textbackslash r'' - odczytuje próbkę temperatury\newline
+   ,,AT+GETTEMP\textbackslash r'' - Odczytuje próbkę temperatury\newline
+   ,,AT+GETPRESSURE\textbackslash r'' - Odczytuje próbkę ciśnienia\newline
    ,,AT+SETCONFIG,\lbrack temp\rbrack,\lbrack pressure\rbrack,\lbrack standby\rbrack,\lbrack mode\rbrack\textbackslash r'' - Ustawia konfigurację według parametrów z dokumentacji producenta: \lbrack temp\rbrack - temperature\textunderscore sampling, \lbrack pressure\rbrack - pressure\textunderscore sampling, \lbrack standby\rbrack - standby\textunderscore period, \lbrack mode\rbrack - running\textunderscore mode. Eg. \textit{AT+SETCONFIG,128,16,0,3\textbackslash r}\newline
    ,,AT+WAITRDY\textbackslash r'' - Czeka na flagę RDY rejetru statusowego. Timeout = 20s.\newline
    ,,AT+SREST\textbackslash r'' - Programowy reset czujnika\newline
@@ -73,9 +76,9 @@ Jak wspomniano we wstępie, podczas projektu korzystano z systemu kontroli wersj
 \newline
 W przypadku pierwszego z nich:
 \begin{itemize}
-    \item Wykonano 12 pull requestów
-    \item Stworzono 20 gałęzi
-    \item Wykonano 81 commitów
-    \item Napisano 2080 linii kodu + pliki konfiguracyjne
+    \item Wykonano 16 pull requestów
+    \item Stworzono 22 gałęzie
+    \item Wykonano 100 commitów
+    \item Napisano 2264 linii kodu + pliki konfiguracyjne
 \end{itemize}
 Skorzystanie z platformy Github pozwoliło przede wszystkim na pełną kontrolę, nad kodem opisanym przez powyższe liczby. W trakcie wykonywania projektu, był on nieustannie sprawdzany pod kątem poprawności składni, dobrych praktyk w tworzeniu kodu, a także testowany manualnie. Możliwość przejrzystej dyskusji, pozwoliła wszystkim członkom zespołu nauczyć się wielu nowych technik, a także spojrzeć na kod z cudzej perspektywy. Takie podejście, zdecydowanie jest dobrą praktyką, pozwalającą uniknąć wielu godzin poszukiwania błędów. W swojej książce \textit{Pragmatyczny programista. Od czeladnika do mistrza.} Andrew Hunt oraz David Thomas piszą: ,,Zawsze należy stosować system kontroli kodu źródłowego. Zawsze. Nawet jeśli stanowimy jednoosobowy zespół i jeśli cały projekt zajmuje zaledwie tydzień. Kontroli kodu źródłowego, powinno podlegać dosłownie wszystko''\cite{pragmatic}.

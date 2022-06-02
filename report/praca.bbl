@@ -62,21 +62,49 @@
     \field{title}{STS3x-DIS Datasheet}
   \endentry
 
-  \entry{usb_specification}{manual}{}
+  \entry{sts_mouser}{misc}{}
     \name{author}{1}{}{%
-      {{hash=oU}{%
-         family={organization},
-         familyi={o\bibinitperiod},
-         given={USB},
-         giveni={U\bibinitperiod},
+      {{hash=EM}{%
+         family={ELECTRONICS},
+         familyi={E\bibinitperiod},
+         given={MOUSER},
+         giveni={M\bibinitperiod},
       }}%
     }
-    \strng{namehash}{oU1}
-    \strng{fullhash}{oU1}
+    \strng{namehash}{EM1}
+    \strng{fullhash}{EM1}
+    \field{labelnamesource}{author}
+  \field{howpublished}{\url{https://www.mouser.pl/new/sensirion/sensirion-sts3x-dis-sensors/}}
+  \endentry
+
+  \entry{bmp_datasheet}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=B}{%
+         family={BOSCH},
+         familyi={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{B1}
+    \strng{fullhash}{B1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-  \field{howpublished}{\url{https://www.usb.org/document-library/usb-20-specification}}
-    \field{title}{USB 2.0 specification}
+  \field{howpublished}{\url{https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf}}
+    \field{title}{BMP280 Digital Pressure Sensor Datasheet}
+  \endentry
+
+  \entry{bmp_mouser}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=EM}{%
+         family={ELECTRONICS},
+         familyi={E\bibinitperiod},
+         given={MOUSER},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{EM1}
+    \strng{fullhash}{EM1}
+    \field{labelnamesource}{author}
+  \field{howpublished}{\url{https://www.mouser.pl/images/boschsensortec/lrg/BMP280_t.jpg}}
   \endentry
 
   \entry{mq2_datasheet}{manual}{}
@@ -96,6 +124,23 @@
     \field{title}{MQ-2 Gas Sensor Datasheet}
   \endentry
 
+  \entry{usb_specification}{manual}{}
+    \name{author}{1}{}{%
+      {{hash=oU}{%
+         family={organization},
+         familyi={o\bibinitperiod},
+         given={USB},
+         giveni={U\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{oU1}
+    \strng{fullhash}{oU1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{\url{https://www.usb.org/document-library/usb-20-specification}}
+    \field{title}{USB 2.0 specification}
+  \endentry
+
   \entry{mic_datasheet}{manual}{}
     \name{author}{1}{}{%
       {{hash=M}{%
@@ -109,21 +154,6 @@
     \field{labeltitlesource}{title}
   \field{howpublished}{\url{https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/mic5365.pdf}}
     \field{title}{MIC5365-3.3YC5 Datasheet}
-  \endentry
-
-  \entry{bmp_datasheet}{manual}{}
-    \name{author}{1}{}{%
-      {{hash=B}{%
-         family={BOSCH},
-         familyi={B\bibinitperiod},
-      }}%
-    }
-    \strng{namehash}{B1}
-    \strng{fullhash}{B1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-  \field{howpublished}{\url{https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf}}
-    \field{title}{BMP280 Digital Pressure Sensor Datasheet}
   \endentry
 
   \entry{cp2102_datasheet}{manual}{}

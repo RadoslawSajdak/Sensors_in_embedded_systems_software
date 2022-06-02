@@ -29,14 +29,32 @@ Układ, programowany jest przy użyciu interfejsu SWD oraz programatora ST-link.
 \section{STS30}
 
 Sensor STS30-DIS marki Sensirion to cyfrowy, precyzyjny sensor temperatury. Wybraliśmy go jako przykładowy sensor działający po I$^2$C, oraz będący bardzo dobrze udokumentowany przez producenta. Oferuje dokładność 0.2 ℃ w zakresie temperatur 0-60 ℃, oraz funkcje takie jak wbudowane ogrzewanie, rejestr statusu, zmienny adres, soft reset po I$^2$C i wiele innych\cite{sts_datasheet}. Wszystkie dane z sensora są weryfikowane CRC-8.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4cm]{Graphics/sts_img.png}
+    \caption{Układ STS3x-DIS\cite{sts_mouser}}
+    \label{img:sts_mouser}
+\end{figure}
 
 \section{BMP280}
 
-Krótki opis sensora Matiego
+Czujnik BMP280 to cyfrowy czujnik ciśnienia atmosferycznego. Pozwala on na pomiary ciśnienia w zakresie 300-1100hPA z dokładnością do jednego hektopaskala. Zasilany napięciem 3.3V, sterowany przy użyciu interfejsu SPI, pobiera mniej niż 2mA prądu. Jest to wyjątkowo popularny układ stosowany nie tylko w amatorskich projektach. Jego dodatkową cechą, jest możliwość pomiaru temperatury z dokładnością 0.01 stopnia celcjusza\cite{bmp_datasheet}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4cm]{Graphics/bmp_img.png}
+    \caption{Układ BMP280\cite{bmp_mouser}}
+    \label{img:bmp_mouser}
+\end{figure}
 
 \section{MQ2}
 
-Krótki opis sensora Matiego
+Czujnik MQ-2 to analogowy czujnik palnych gazów. Zasilany napięciem 5V, pobiera około 150mA prądu. Wynika to ze sposobu jego działania - podgrzania ceramicznego elementu wewnątrz, który reagując z odpowiednimi gazami, wpływa na napięcie wyjściowe. MQ-2 pozwala na wykrywanie LPG, propanu, wodoru i innych gazów wymienionych w dokumentacji układu\cite{mq2_datasheet}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4cm]{Graphics/mq2_img.png}
+    \caption{Układ MQ-2\cite{bmp_mouser}}
+    \label{img:mq_img}
+\end{figure}
 
 \section{Makefile}
 Jak wspomniano we wstępie, jednym z założeń, było tworzenie oprogramowania równolegle, na dwóch różnych procesorach. STM32F1 i STM32F4. Procesory te, należąc do zupełnie różnych rodzin, korzystają z innych bibliotek, a do ich konfiguracji niejednokrotnie wymagane są różne kroki. Z tego powodu, w projekcie wykorzystano program \emph{Make}. Pozwala on, na podstawie pliku konfiguracyjnego \emph{makefile}, zdefiniować sposób kompilacji oraz ścieżki bibliotek wykorzystywanych przez kod. Narzędzie to, jest stosunkowo proste w konfiguracji, a jej przykłady są ogólnodostępne w internecie. Dodatkowym argumentem przemawiającym za jego wykorzystaniem, była chęć jego przetestowania w praktyce.
