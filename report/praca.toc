@@ -12,13 +12,14 @@
 \contentsline {section}{\numberline {2.1}Projekt płytki}{7}%
 \contentsline {subsection}{\numberline {2.1.1}Schemat}{7}%
 \contentsline {subsection}{\numberline {2.1.2}Layout}{13}%
-\contentsline {subsection}{\numberline {2.1.3}Popełnione błędy oraz wykonane przeróbki}{16}%
-\contentsline {section}{\numberline {2.2}Oprogramowanie}{22}%
-\contentsline {subsection}{\numberline {2.2.1}Biblioteki peryferiów}{22}%
-\contentsline {subsection}{\numberline {2.2.2}API}{23}%
-\contentsline {subsection}{\numberline {2.2.3}Lista dostępnych funkcji}{25}%
-\contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{26}%
-\contentsline {chapter}{\numberline {3}Prezentacja działania}{27}%
-\contentsline {chapter}{\numberline {4}Wnioski}{31}%
+\contentsline {subsection}{\numberline {2.1.3}Kompatybilność elektromagnetyczna}{16}%
+\contentsline {subsection}{\numberline {2.1.4}Popełnione błędy oraz wykonane przeróbki}{19}%
+\contentsline {section}{\numberline {2.2}Oprogramowanie}{25}%
+\contentsline {subsection}{\numberline {2.2.1}Biblioteki peryferiów}{25}%
+\contentsline {subsection}{\numberline {2.2.2}API}{26}%
+\contentsline {subsection}{\numberline {2.2.3}Lista dostępnych funkcji}{28}%
+\contentsline {subsection}{\numberline {2.2.4}System kontroli wersji}{29}%
+\contentsline {chapter}{\numberline {3}Prezentacja działania}{31}%
+\contentsline {chapter}{\numberline {4}Wnioski}{35}%
 \babel@toc {polish}{}
 \babel@toc {polish}{}
