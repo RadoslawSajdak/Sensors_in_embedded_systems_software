@@ -78,11 +78,18 @@ void api_menu_set_default(void)
     g_chosen_sensor = DEFAULT_COMMANDS;
 }
 
-void api_bmp_get_data(void)
+void api_bmp_get_temp(void)
 {
     memset(&g_bmp_data, 0, sizeof(bmp280_data_s));
     bmp280_get_data(&g_bmp_data);
     api_send_response(g_bmp_data.temperature);
+}
+
+void api_bmp_get_pressure(void)
+{
+    memset(&g_bmp_data, 0, sizeof(bmp280_data_s));
+    bmp280_get_data(&g_bmp_data);
+    api_send_response(g_bmp_data.pressure);
 }
 
 void api_sts_get_temp(void)

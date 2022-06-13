@@ -37,7 +37,6 @@ hub_retcode_t           wait_for_message(char *message);
 hub_retcode_t           parse_at_command(void);
 static void             api_msg_timeout_handler(void);
 static uint32_t         str_to_u32(char *num_as_string);
-static inline
 
 
 /***** Local Variables *****/
@@ -48,7 +47,8 @@ static const command_handlers_s         __menu_command_list[MAX_COMMAND_NUMBER] 
                                                                                     {.command = "MQ", .callback = api_menu_set_mq},
                                                                                     {.command = "BACK", .callback = api_menu_set_default}};
 
-static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETDATA", .callback = api_bmp_get_data},
+static const command_handlers_s         __bmp_command_list[MAX_COMMAND_NUMBER] = {  {.command = "GETTEMP", .callback = api_bmp_get_temp},
+                                                                                    {.command = "GETPRESSURE", .callback = api_bmp_get_pressure},
                                                                                     {.command = "SETCONFIG", .callback = api_bmp_set_config},
                                                                                     {.command = "WAITRDY", .callback = api_bmp_get_ready},
                                                                                     {.command = "SRESET", .callback = api_bmp_soft_reset},

@@ -24,7 +24,8 @@ void api_menu_set_sts(void);
 void api_menu_set_mq(void);
 void api_menu_set_default(void);
 
-void api_bmp_get_data(void);
+void api_bmp_get_temp(void);
+void api_bmp_get_pressure(void);
 void api_bmp_soft_reset(void);
 void api_bmp_set_config(void);
 void api_bmp_get_ready(void);
