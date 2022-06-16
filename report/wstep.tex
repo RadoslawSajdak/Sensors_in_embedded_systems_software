@@ -48,12 +48,21 @@ Czujnik BMP280 to cyfrowy czujnik ciśnienia atmosferycznego. Pozwala on na pomi
 
 \section{MQ2}
 
-Czujnik MQ-2 to analogowy czujnik palnych gazów. Zasilany napięciem 5V, pobiera około 150mA prądu. Wynika to ze sposobu jego działania - podgrzania ceramicznego elementu wewnątrz, który reagując z odpowiednimi gazami, wpływa na napięcie wyjściowe. MQ-2 pozwala na wykrywanie LPG, propanu, wodoru i innych gazów wymienionych w dokumentacji układu\cite{mq2_datasheet}.
+Czujnik MQ-2 to analogowy czujnik palnych gazów. Zasilany napięciem 5V, pobiera około 150mA prądu. Wynika to ze specyfiki modułu, który w swojej konstrukcji wymaga elementu podgrzewającego. MQ-2 pozwala na wykrywanie LPG, propanu, wodoru i innych gazów wymienionych w dokumentacji układu\cite{mq2_datasheet}.
+\newline
+Rysunek \ref{img:mq_elements} przedstawia budowę modułu MQ-2. Składa się on z ceramicznej tuby (wykonanej z tritlenku diglinu Al2O3), warstwy odpowiedzialnej za detekcje gazów (tlenek cyny (IV) SnO2), elektrody pomiarowej, oraz wspomnianego już elementu grzewczego. Grzałka zapewnia odpowiednio wysoką temperaturę potrzebną do pracy elementu wykrywającego. Tlenek cyny (IV) zmienia swoją rezystancję w kontakcie z niektórymi gazami. W czystym powietrzu jego przewodność jest niższa i rożnie wraz z koncentracją konkretnych gazów. Zależność tą można wykorzystać tworząc na wyjsciu dzielnik napięcia adekwatny do zakresu napieć wykorzystanego mikrokontrolera.
 \begin{figure}[H]
     \centering
     \includegraphics[width=4cm]{Graphics/mq2_img.png}
     \caption{Układ MQ-2\cite{bmp_mouser}}
     \label{img:mq_img}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/mq_elements.jpg}
+    \caption{Konstrukcja MQ-2\cite{mq2_datasheet}}
+    \label{img:mq_elements}
 \end{figure}
 
 \section{Makefile}
