@@ -39,6 +39,18 @@ Sensor STS30-DIS marki Sensirion to cyfrowy, precyzyjny sensor temperatury. Wybr
 \section{BMP280}
 
 Czujnik BMP280 to cyfrowy czujnik ciśnienia atmosferycznego. Pozwala on na pomiary ciśnienia w zakresie 300-1100hPA z dokładnością do jednego hektopaskala. Zasilany napięciem 3.3V, sterowany przy użyciu interfejsu SPI, pobiera mniej niż 2mA prądu. Jest to wyjątkowo popularny układ stosowany nie tylko w amatorskich projektach. Jego dodatkową cechą, jest możliwość pomiaru temperatury z dokładnością 0.01 stopnia celcjusza\cite{bmp_datasheet}.
+\newline
+BMP280 składa się z piezorezystancyjnego czujnika ciśnienia i dedykowanego układu ASIC, którego zadaniem jest konwersja sygnału analogowego na cyfrowy, jego kompensacja, a następnie transmisja przez interfejs SPI/I2C. Moduł posiada konfigurowalną rozdzielczość pomiaru, dzięki czemu użytkownik może dostosować czujnik pod własne potrzeby, wybierając pomiędzy energooszczędnością a wysoką dokładnością. Dodatkowo układ posiada filtr IIR o konfigurowalnych współczynnikach, którego zadaniem jest eliminacja przypadkowych zaburzeń, jak np. trzaśnięcie drzwiami.
+\newline
+Rysunek \ref{img:bmp_sampling} przedstawia pełen cykl pomiarowy wykonywany każdorazowo przez moduł. W pierwszej kolejności wykonywany jest pomiar temperatury, ponieważ wykorzystywany jest on do kompensacji zmierzonego później ciśnienia. Następnie w zależności od preferencji użytkownika, nastąpi filtracja, bądź ten krok zostanie pominięty. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graphics/bmp280_sampling.jpg}
+    \caption{Cykl pomiarowy BMP280\cite{bmp_datasheet}}
+    \label{img:bmp_sampling}
+\end{figure}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=4cm]{Graphics/bmp_img.png}
